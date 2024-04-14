@@ -1,0 +1,23 @@
+.register-form {
+    width: 400px;
+    height: 600px;
+    background-color: aquamarine;
+    display: block;
+}
+
+.form-field {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+.mat-form-field {
+    margin-top: 25px;
+}
+
+.mat-stroked-button {
+    border: 1px solid black;
+    margin-left: 20px;
+}
