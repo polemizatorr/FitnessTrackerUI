@@ -1,0 +1,14 @@
+.Footer {
+    /* Position */
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    z-index: 10;
+    width: 100%;
+    /* Text */
+    text-align: center;
+    font-weight: bold;
+    /* Color */
+    color: white;
+    background-color: #1976d2;
+}
