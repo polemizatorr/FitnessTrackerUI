@@ -1,38 +1,40 @@
 <h1>Sign up</h1>
 
 <div class="register-form">
-    <div class="form-field">
-        <mat-form-field appearance="outline">
-            <mat-label>Username</mat-label>
-            <input matInput placeholder="Placeholder">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+    <form (ngSubmit)="onRegisterFormSubmit()" #registerForm="ngForm">
+        <div class="form">
+            <mat-form-field appearance="outline" class="username-label">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Username" name="username" [(ngModel)]="formData.username">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput placeholder="Placeholder">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" name="email" [(ngModel)]="formData.email">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput placeholder="Placeholder">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" name="password" [(ngModel)]="formData.password">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Firstname</mat-label>
-            <input matInput placeholder="Placeholder">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Firstname</mat-label>
+                <input matInput placeholder="Firstname" name="Firstname" [(ngModel)]="formData.firstname">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline">
-            <mat-label>Lastname</mat-label>
-            <input matInput placeholder="Placeholder">
-            <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
-        </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Lastname</mat-label>
+                <input matInput placeholder="Lastname" name="Lastname" [(ngModel)]="formData.lastname">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
 
-        <br>
-        <button mat-stroked-button >Sign up</button>
-    </div>
+            <br>
+            <button mat-stroked-button class="register-button" >Sign up</button>
+        </div>
+    </form>
 </div>

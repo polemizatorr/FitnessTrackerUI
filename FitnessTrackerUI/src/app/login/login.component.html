@@ -1,0 +1,23 @@
+<h1>Login</h1>
+
+<div class="register-form">
+    <form (ngSubmit)="onLoginSubmit()" #registerForm="ngForm">
+        <div class="form">
+            <mat-form-field appearance="outline" class="username-label">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Username" name="username" [(ngModel)]="loginData.username">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" name="password" [(ngModel)]="loginData.password">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+            </mat-form-field>
+
+
+            <br>
+            <button mat-stroked-button class="login-button" >Login</button>
+        </div>
+    </form>
+</div>
