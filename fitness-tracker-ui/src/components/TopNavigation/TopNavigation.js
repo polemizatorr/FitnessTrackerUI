@@ -7,8 +7,17 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router-dom';
 
-const TopNavigation = () => (
+
+
+const TopNavigation = () => {
+  //const navigate = useNavigate();
+  function handleLogin() {
+    //navigate('/login');
+  }
+
+  return (
   <div className={styles.TopNavigation}>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -25,16 +34,16 @@ const TopNavigation = () => (
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             News
           </Typography>
-          <Button color="inherit" onClick={handleLogin}>Login</Button>
+          <Button color="inherit" onClick={() => {handleLogin()}}> Login</Button>
+          
         </Toolbar>
       </AppBar>
     </Box>
   </div>
-);
+  )
+};
 
-function handleLogin() {
-  console.log("login");
-}
+
 
 TopNavigation.propTypes = {};
 

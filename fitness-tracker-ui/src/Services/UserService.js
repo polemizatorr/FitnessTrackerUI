@@ -12,7 +12,7 @@ export const registerUser = (data) => {
     })
 }
 
-const loginUser = (data) => {
+export const loginUser = (data) => {
     return axios.post(API_URL + "/security/login", data)
     .then((res) => {
         console.log(res);
@@ -21,5 +21,3 @@ const loginUser = (data) => {
         console.log(err);
     })
 }
-
-export default loginUser
