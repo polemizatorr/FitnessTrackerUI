@@ -15,7 +15,7 @@ export const registerUser = (data) => {
 export const loginUser = (data) => {
     return axios.post(API_URL + "/security/login", data)
     .then((res) => {
-        console.log(res);
+        localStorage.setItem('token', res.data.value);
     })
     .catch((err) => {
         console.log(err);

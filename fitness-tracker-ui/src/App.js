@@ -1,10 +1,44 @@
 import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from "react-router-dom";
+import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import AerobicTrainings from './components/AerobicTrainings/AerobicTrainings';
+import StrengthTrainings from './components/StrengthTrainings/StrengthTrainings';
+import AerobicTrainingDetails from './components/AerobicTrainingDetails/AerobicTrainingDetails';
+import StregthTrainingDetails from './components/StregthTrainingDetails/StregthTrainingDetails';
+import CreateAerobicTrainings from './components/CreateAerobicTraining/CreateAerobicTraining';
+import EditAerobicTraining from './components/EditAerobicTraining/EditAerobicTraining';
+import Layout from './components/Layout/Layout';
+import ErrorPage from './components/ErrorPage/ErrorPage';
 
 
 function App() {
+
+  const useLayout = (child) => {
+    
+    return (
+      <Layout children={child}/>
+    )
+  }
+
   return (
-    <div className="App">
-    </div>
+    <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={useLayout(<Login/>)} /> 
+        <Route path="/login" element={useLayout(<Login/>)} /> 
+        <Route path="/register" element={useLayout(<Register />)} /> 
+        <Route path="/aerobic" element={useLayout(<AerobicTrainings/>)} /> 
+        <Route path="/aerobic-create-new" element={useLayout(<CreateAerobicTrainings/>)} /> 
+        <Route path="/aerobic-edit-training/:id" element={useLayout(<EditAerobicTraining/>)} /> 
+        <Route path="/aerobic/:id" element={useLayout(<AerobicTrainingDetails/>)} /> 
+        <Route path="/strength" element={useLayout(<StrengthTrainings />)} /> 
+        <Route path="/strength/:id" element={useLayout(<StregthTrainingDetails />)} /> 
+        <Route path="*" element={useLayout(<ErrorPage/>)} /> 
+      </Routes>
+    </BrowserRouter>
+  </React.StrictMode>
   );
 }
 

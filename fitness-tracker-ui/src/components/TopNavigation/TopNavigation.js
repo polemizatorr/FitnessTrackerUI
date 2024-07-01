@@ -12,9 +12,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 const TopNavigation = () => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   function handleLogin() {
-    //navigate('/login');
+    navigate('/login');
   }
 
   return (

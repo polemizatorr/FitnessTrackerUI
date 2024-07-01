@@ -1,7 +1,14 @@
 .AerobicTrainings {}
 
-h2 {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center
+.Header {
+    display: flex;
+    justify-content: center;
+}
+
+h2 
+{
+    text-align: center;
+    display: block; /* This is the default for h2 elements */
+    margin: 0 auto; /* Auto left and right margins center the block */
+    width: fit-content; /* Adjusts the width to fit its content */
 }

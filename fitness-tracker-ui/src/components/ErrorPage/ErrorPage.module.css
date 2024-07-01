@@ -1,0 +1,25 @@
+.ErrorPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background-color: #f8f8f8;
+}
+
+.ErrorPage h1 {
+    font-size: 6em;
+    margin: 0;
+    color: #ff6b6b;
+  }
+  
+  .ErrorPage h2 {
+    font-size: 2em;
+    margin: 0.5em 0;
+  }
+  
+  .ErrorPage p {
+    font-size: 1.2em;
+    margin: 1em 0;
+  }
