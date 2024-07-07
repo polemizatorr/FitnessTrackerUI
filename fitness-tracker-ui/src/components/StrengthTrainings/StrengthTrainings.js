@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import styles from './StrengthTrainings.module.css';
-import { getStrengthTrainings } from '../../Services/TrainingsService';
+import { getStrengthTrainings, deleteStrengthTraining } from '../../Services/TrainingsService';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,6 +29,14 @@ const StrengthTrainings = () => {
 
   const navigateToTraining = (id) => {
     navigate("/strength/" + id);
+  }
+
+  const deleteTraining = async (id) => {
+    await deleteStrengthTraining(id);
+  }
+
+  const createTraining = () => {
+    navigate("/create-new-strength-training");
   }
 
   if (loading) {
@@ -58,13 +66,16 @@ const StrengthTrainings = () => {
               <TableCell align="left">{new Date(training.trainingDate).toLocaleDateString()}</TableCell>
               <TableCell align="left">
                 <Button color="primary" onClick={() => {navigateToTraining(training.strenghtTrainingId)}}> View</Button> 
+                <Button color="primary" onClick={() => {deleteTraining(training.strenghtTrainingId)}}> Delete</Button> 
               </TableCell>
               
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </TableContainer></>
+    </TableContainer>
+    <Button color="primary" onClick={() => {createTraining()}}> Add Training</Button> 
+    </>
   )
 };
 

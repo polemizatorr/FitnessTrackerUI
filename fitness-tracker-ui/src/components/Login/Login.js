@@ -4,18 +4,20 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { loginUser } from '../../Services/UserService';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
 
+  const navigate = useNavigate();
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = (e) => {
     e.preventDefault();
     if (username && password) {
-      console.log(username, password)
       loginUser({username: username, password: password});
+      navigate("/aerobic")
     }
   }
 

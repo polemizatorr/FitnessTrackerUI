@@ -16,6 +16,7 @@ export const loginUser = (data) => {
     return axios.post(API_URL + "/security/login", data)
     .then((res) => {
         localStorage.setItem('token', res.data.value);
+        localStorage.setItem('username', data.username);
     })
     .catch((err) => {
         console.log(err);

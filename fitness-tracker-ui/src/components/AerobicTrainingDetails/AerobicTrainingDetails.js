@@ -31,7 +31,7 @@ const AerobicTrainingDetails = () => {
       <p><strong>Activity Name:</strong> {training.activityType}</p>
       <p><strong>Activity Duration :</strong> {training.activityDurationMinutes} Mins</p>
       <p><strong>Calories Burnt:</strong> {training.calorieBurnt} kcal</p>
-      <p><strong>Activity Date:</strong> {new Date(training.creationDate).toLocaleDateString()}</p>
+      <p><strong>Activity Date:</strong> {new Date(training.activityDate).toLocaleDateString()}</p>
     </div>
   </>
   )

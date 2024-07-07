@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './StregthTrainingDetails.module.css';
-import { getStrengthTraining } from '../../Services/TrainingsService';
+import { getStrengthTraining, deleteSet, createSet} from '../../Services/TrainingsService';
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,6 +19,7 @@ const StregthTrainingDetails = () => {
   const [training, setTraining] = useState({});
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
   const { id } = useParams();
   useEffect(() => {
     getStrengthTraining(id)
@@ -33,7 +35,13 @@ const StregthTrainingDetails = () => {
     )
   }
 
-  console.log("traingn"  + JSON.stringify(training));
+  const createNewSet = async (strengthTrainingId, setData) => {
+    await createSet(strengthTrainingId, setData);
+  }
+
+  const deleteSetById = async (id) => {
+    await deleteSet(id);
+  }
   
   return (
     <div className={styles.StrengthTrainingDetails}>
@@ -62,12 +70,13 @@ const StregthTrainingDetails = () => {
             <TableCell align="left">Exercise Name</TableCell>
             <TableCell align="left">Exhaustion Level&nbsp;(1 - 10)</TableCell>
             <TableCell align="left">weight&nbsp;(kg)</TableCell>
+            <TableCell align="left">Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {training.sets.map((set, index) => (
             <TableRow
-              key={index}
+              key={set.setId}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell align="left">{index + 1}</TableCell>
@@ -77,11 +86,16 @@ const StregthTrainingDetails = () => {
               <TableCell align="left">{set.exerciseName}</TableCell>
               <TableCell align="left">{set.exhaustionLevel}</TableCell>
               <TableCell align="left">{set.weight}</TableCell>
+              <TableCell align="left">
+                <Button color="primary" onClick={() => {deleteSetById(set.setId)}}> Delete</Button>
+              </TableCell>
+                
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+    <Button color="primary" onClick={() => {navigate('/set-create-new/' + training.strenghtTrainingId)}}> Add Set</Button>
 
     </div>
       

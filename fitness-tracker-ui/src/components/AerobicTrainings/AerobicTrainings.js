@@ -83,7 +83,7 @@ const AerobicTrainings = () => {
               <TableCell align="left">{training.activityType}</TableCell>
               <TableCell align="left">{training.activityDurationMinutes}</TableCell>
               <TableCell align="left">{training.calorieBurnt}</TableCell>
-              <TableCell align="left">{new Date(training.creationDate).toLocaleDateString()}</TableCell>
+              <TableCell align="left">{new Date(training.activityDate).toLocaleDateString()}</TableCell>
               <TableCell align="left"> 
                 <Button color="primary" onClick={() => {viewTraining(training.aerobicTrainingId)}}> View</Button> 
                 <Button color="primary" onClick={() => {editTraining(training.aerobicTrainingId)}}> Edit</Button> 

@@ -11,6 +11,8 @@ import CreateAerobicTrainings from './components/CreateAerobicTraining/CreateAer
 import EditAerobicTraining from './components/EditAerobicTraining/EditAerobicTraining';
 import Layout from './components/Layout/Layout';
 import ErrorPage from './components/ErrorPage/ErrorPage';
+import CreateSet from './components/CreateSet/CreateSet';
+import CreateStrengthTraining from './components/CreateStrengthTraining/CreateStrengthTraining';
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
         <Route path="/aerobic/:id" element={useLayout(<AerobicTrainingDetails/>)} /> 
         <Route path="/strength" element={useLayout(<StrengthTrainings />)} /> 
         <Route path="/strength/:id" element={useLayout(<StregthTrainingDetails />)} /> 
+        <Route path="/create-new-strength-training" element={useLayout(<CreateStrengthTraining />)} /> 
+        <Route path="/set-create-new/:id" element={useLayout(<CreateSet />)} /> 
         <Route path="*" element={useLayout(<ErrorPage/>)} /> 
       </Routes>
     </BrowserRouter>

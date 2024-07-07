@@ -13,7 +13,7 @@ const EditAerobicTraining = () => {
   const [activityType, setActivityType] = useState('');
   const [activityDurationMinutes, setActivityDurationMinutes] = useState('');
   const [calorieBurnt, setCalorieBurnt] = useState('');
-  const [date, setDate] = useState('');
+  const [activityDate, setActivityDate] = useState('');
   const navigate = useNavigate();
 
   const {id} = useParams();
@@ -26,7 +26,7 @@ const EditAerobicTraining = () => {
         setActivityType(res.data.activityType);
         setActivityDurationMinutes(res.data.activityDurationMinutes);
         setCalorieBurnt(res.data.calorieBurnt);
-        setDate(res.data.date)
+        setActivityDate(res.data.date)
       })
   }, []);
 
@@ -36,7 +36,7 @@ const EditAerobicTraining = () => {
       activityType,
       activityDurationMinutes,
       calorieBurnt: parseInt(calorieBurnt, 10),
-      date,
+      activityDate,
     };
 
     // Try Catch?
@@ -86,12 +86,12 @@ const EditAerobicTraining = () => {
             required />
         </div>
         <div>
-          <label htmlFor="date">Date</label>
+          <label htmlFor="activityDate">Date</label>
           <input
             type="datetime-local"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            id="activityDate"
+            value={activityDate}
+            onChange={(e) => setActivityDate(e.target.value)}
             required />
         </div>
         <button type="submit">Submit</button>
