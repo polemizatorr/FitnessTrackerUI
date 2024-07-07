@@ -11,12 +11,19 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../actions/authActions';
 
 
 
 const TopNavigation = () => {
 
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const username = useSelector(state => state.auth.username);
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,11 +39,21 @@ const TopNavigation = () => {
     navigate('/login');
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    dispatch(logout());
+    navigate('/login');
+  }
+
   return (
   <div className={styles.TopNavigation}>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+        {
+          isAuthenticated ? (<p>Welcome {username}</p>) : ('')
+        }
           <IconButton
             size="large"
             edge="start"
@@ -65,9 +82,13 @@ const TopNavigation = () => {
             
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
           </Typography>
-          <Button color="inherit" onClick={() => {handleLogin()}}> Login</Button>
+
+        {
+          isAuthenticated ? (<Button color="inherit" onClick={() => {handleLogout()}}> Logout</Button>)
+          : (<Button color="inherit" onClick={() => {handleLogin()}}> Login</Button>)  
+        }
+          
           
         </Toolbar>
       </AppBar>

@@ -10,9 +10,12 @@ import { getAerobicTrainings, deleteAerobicTraining, createAerobicTraining } fro
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import '../AerobicTrainings/AerobicTrainings.module.css'
 
 const AerobicTrainings = () => {
+
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
   const navigate = useNavigate();
   const [trainings, setTrainings] = useState([]);
@@ -49,6 +52,10 @@ const AerobicTrainings = () => {
     await deleteAerobicTraining(id);
     await fetchData();
     navigate("/aerobic");
+  }
+
+  if (!isAuthenticated) {
+    return <div>User not authenticated</div>;
   }
 
   if (loading) {

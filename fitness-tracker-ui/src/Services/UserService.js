@@ -15,8 +15,11 @@ export const registerUser = (data) => {
 export const loginUser = (data) => {
     return axios.post(API_URL + "/security/login", data)
     .then((res) => {
-        localStorage.setItem('token', res.data.value);
-        localStorage.setItem('username', data.username);
+        if (res.statusCode == 200)
+            {
+                localStorage.setItem('token', res.data.value);
+                localStorage.setItem('username', data.username);
+            }        
     })
     .catch((err) => {
         console.log(err);

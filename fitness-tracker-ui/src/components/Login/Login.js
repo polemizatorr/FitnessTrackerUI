@@ -5,11 +5,14 @@ import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { loginUser } from '../../Services/UserService';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../actions/authActions';
 
 
 const Login = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
@@ -17,6 +20,7 @@ const Login = () => {
     e.preventDefault();
     if (username && password) {
       loginUser({username: username, password: password});
+      dispatch(loginSuccess(username));
       navigate("/aerobic")
     }
   }
