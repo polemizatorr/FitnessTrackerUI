@@ -48,6 +48,9 @@ const Register = () => {
 
   return(
   <div className={styles.Login}>
+    <br></br>
+    <h2>Register</h2>
+    <br></br><br></br>
     <form onSubmit={handleRegister}>
         Username: <br></br>
         <TextField  value={username} onChange={e => setUsername(e.target.value)} type="text" variant='outlined' /> <br></br>
