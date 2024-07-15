@@ -13,7 +13,7 @@ const AerobicTrainingDetails = () => {
   useEffect(() => {
     getAerobicTraining(id)
       .then((res) => {
-        setTrainings(res.data);
+        setTrainings(res.data.data);
         setLoading(false);
       })
   }, []);

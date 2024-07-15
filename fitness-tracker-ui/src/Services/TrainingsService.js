@@ -12,6 +12,15 @@ export const getAerobicTrainings = async () => {
     }
 }
 
+export const getAerobicTrainingsForUser = async (username) => {
+    try {
+        const res = await axios.get(API_URL + "/AerobicTrainings/user/" + username);
+        return res;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export const getAerobicTraining = async (id) => {
     try {
         const res = await axios.get(API_URL + "/AerobicTrainings/" + id);
@@ -67,6 +76,15 @@ export const getStrengthTrainings = async () => {
     }
 }
 
+export const getStrengthTrainingsForUser = async (username) => {
+    try {
+        const res = await axios.get(API_URL + "/StrengthTrainings/user/" + username);
+        return res;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 export const getStrengthTraining = async (id) => {
     try {
         const res = await axios.get(API_URL + "/StrengthTrainings/" + id);
@@ -110,7 +128,6 @@ export const createSet = async (strengthTrainingId, setData) => {
         'Content-Type': 'application/json',
         'Authorization': "Bearer " + token,
     };
-    console.log(setData);
 
     try {
         const res = await axios.post(API_URL + "/Sets/" + strengthTrainingId, setData, {headers: headers});

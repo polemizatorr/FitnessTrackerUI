@@ -24,7 +24,7 @@ const StregthTrainingDetails = () => {
   useEffect(() => {
     getStrengthTraining(id)
       .then((res) => {
-        setTraining(res.data);
+        setTraining(res.data.data);
         setLoading(false);
       })
   }, []);

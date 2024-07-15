@@ -11,12 +11,11 @@ const CreateStrengthTraining = () => {
   const [trainingDate, setTrainingDate] = useState('');
 
   const navigate = useNavigate();
+  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
-    console.log('Training Name:', trainingName);
-    console.log('Training Date:', trainingDate);
 
     await createStrengthTraining({trainingName: trainingName, trainingDate: trainingDate});
     navigate("/strength");

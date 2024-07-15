@@ -7,6 +7,7 @@ import { loginUser } from '../../Services/UserService';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginSuccess } from '../../actions/authActions';
+import { Toaster, toast } from 'react-hot-toast';
 
 
 const Login = () => {
@@ -16,16 +17,31 @@ const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     if (username && password) {
-      loginUser({username: username, password: password});
-      dispatch(loginSuccess(username));
-      navigate("/aerobic")
+      const response = await loginUser({username: username, password: password});
+      if (response.isSuccess === true) 
+      {
+        dispatch(loginSuccess(username));
+        navigate("/aerobic");
+      }
+      else 
+      {
+        toast.error('Login failed!', {
+          position: 'bottom-left',
+          duration: 5000,  // 5 seconds
+          style: {
+              background: '#f44336',
+              color: '#fff',
+          },
+      });
+      }
     }
   }
 
   return(
+    
   <div className={styles.Login}>
     <form onSubmit={handleLogin}>
         Username: <br></br>
@@ -35,6 +51,7 @@ const Login = () => {
 
         <Button variant="outlined" color="secondary" type="submit">Login</Button>
     </form>
+    <Toaster position="top-right" reverseOrder={false} />
   </div>
   )
 }

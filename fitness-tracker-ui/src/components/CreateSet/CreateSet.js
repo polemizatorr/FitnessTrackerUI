@@ -33,7 +33,6 @@ const CreateSet = () => {
     // You can handle form submission here, for example, sending the data to an API
     await createSet(id, formData);
     navigate('/strength/' + id);
-    console.log(formData);
   };
 
 

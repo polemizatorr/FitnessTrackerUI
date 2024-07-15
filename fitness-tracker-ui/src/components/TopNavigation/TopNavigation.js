@@ -39,11 +39,23 @@ const TopNavigation = () => {
     navigate('/login');
   }
 
+  const handleRegister = () => {
+    navigate('/register');
+  }
+
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     dispatch(logout());
     navigate('/login');
+  }
+
+  const handleAerobic = () => {
+    navigate("/aerobic");
+  }
+
+  const handleStrength = () => {
+    navigate("/strength");
   }
 
   return (
@@ -52,7 +64,15 @@ const TopNavigation = () => {
       <AppBar position="static">
         <Toolbar>
         {
-          isAuthenticated ? (<p>Welcome {username}</p>) : ('')
+          isAuthenticated ? (
+          <>
+          <p>Welcome {username}</p>
+          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+          <Button color="inherit" onClick={() => { handleAerobic(); } }> Aerobic</Button>
+          <Button color="inherit" onClick={() => { handleStrength(); } }> Strength</Button>
+          </>
+        ) 
+        : ('')
         }
           <IconButton
             size="large"
@@ -86,7 +106,11 @@ const TopNavigation = () => {
 
         {
           isAuthenticated ? (<Button color="inherit" onClick={() => {handleLogout()}}> Logout</Button>)
-          : (<Button color="inherit" onClick={() => {handleLogin()}}> Login</Button>)  
+          : (
+          <><Button color="inherit" onClick={() => { handleRegister(); } }> Register</Button>
+          <Button color="inherit" onClick={() => { handleLogin(); } }> Login</Button></>
+        
+        )  
         }
           
           

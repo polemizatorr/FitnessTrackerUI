@@ -8,24 +8,40 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import styles from './StrengthTrainings.module.css';
-import { getStrengthTrainings, deleteStrengthTraining } from '../../Services/TrainingsService';
+import { getStrengthTrainings, deleteStrengthTraining, getStrengthTrainingsForUser } from '../../Services/TrainingsService';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const StrengthTrainings = () => {
 
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const username = useSelector(state => state.auth.username);
+
   let id = 1;
+
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [trainings, setTrainings] = useState([]);
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getStrengthTrainings()
+    if (!isAuthenticated) {
+      navigate("/unauthorized");
+    }
+    else {
+      fetchData();
+      }
+    }, [location.pathname]);
+
+  const fetchData = async () => {
+    await getStrengthTrainingsForUser(username)
       .then((res) => {
-        console.log(res);
-        setTrainings(res.data);
+        setTrainings(res.data.data);
         setLoading(false);
       })
-  }, []);
+  }
 
   const navigateToTraining = (id) => {
     navigate("/strength/" + id);
@@ -33,6 +49,7 @@ const StrengthTrainings = () => {
 
   const deleteTraining = async (id) => {
     await deleteStrengthTraining(id);
+    await fetchData();
   }
 
   const createTraining = () => {

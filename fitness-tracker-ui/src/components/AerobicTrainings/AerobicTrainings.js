@@ -6,32 +6,38 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getAerobicTrainings, deleteAerobicTraining, createAerobicTraining } from '../../Services/TrainingsService';
+import { getAerobicTrainings, deleteAerobicTraining, getAerobicTrainingsForUser } from '../../Services/TrainingsService';
 import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import '../AerobicTrainings/AerobicTrainings.module.css'
 
 const AerobicTrainings = () => {
 
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const username = useSelector(state => state.auth.username);
 
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [trainings, setTrainings] = useState([]);
   const [loading, setLoading] = useState(true);
+
+
   useEffect(() => {
-    getAerobicTrainings()
-      .then((res) => {
-        setTrainings(res.data);
-        setLoading(false);
-      })
-  }, []);
+    if (!isAuthenticated){
+      navigate("/unauthorized");
+    }
+    else {
+      fetchData();
+    }
+  }, [isAuthenticated, username, location.pathname, navigate]);
 
   const fetchData = async () => {
-    await getAerobicTrainings()
+    await getAerobicTrainingsForUser(username)
       .then((res) => {
-        setTrainings(res.data);
+        setTrainings(res.data.data);
         setLoading(false);
       })
   }
