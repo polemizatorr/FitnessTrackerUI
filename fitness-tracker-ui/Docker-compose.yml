@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  webapi:
+    build:
+      context: ../../FitnessTracker/Backend/FitnessTracker.WebAPI
+      dockerfile: Dockerfile
+    ports:
+      - "7258:80"
+    networks:
+      - my_network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__FitnessDatabase=Server=db;Database=FitnessTracker;User Id=sa;Password=<YourStrong!Passw0rd>;
+    depends_on:
+      - db
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - my_network
+    depends_on:
+      - webapi
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "<YourStrong!Passw0rd>"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - my_network
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+volumes:
+  sqlvolume:
+
+networks:
+  my_network:
+    driver: bridge

@@ -1,0 +1,15 @@
+.training-details {
+    border: 1px solid #ccc;
+    padding: 16px;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 20px auto;
+  }
+  
+  .training-details h2 {
+    margin-bottom: 12px;
+  }
+  
+  .training-details p {
+    margin: 8px 0;
+  }
