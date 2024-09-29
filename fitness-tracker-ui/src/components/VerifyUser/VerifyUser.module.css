@@ -1,0 +1,11 @@
+.Login {
+    display: block;
+    width: 400px;
+    height: 600px;
+    margin: auto;
+    margin-top: 100px;
+}
+
+.input-field {
+    margin-top: 20px;
+}
