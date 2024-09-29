@@ -3,6 +3,7 @@
 .Header {
     display: flex;
     justify-content: center;
+    margin-bottom: 2rem;
 }
 
 h2 
@@ -11,4 +12,22 @@ h2
     display: block; /* This is the default for h2 elements */
     margin: 0 auto; /* Auto left and right margins center the block */
     width: fit-content; /* Adjusts the width to fit its content */
+    margin-bottom: 1rem;
+}
+
+.IconsSize {
+    font-size: 1.5em;
+}
+
+.circularButton {
+    border: 2px solid #1976d2; /* Black border */
+    border-radius: 50%; /* Circular shape */
+    width: 56px; /* Set width */
+    height: 56px; /* Set height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white; /* Button background */
+    cursor: pointer; /* Pointer cursor */
+    transition: background-color 0.3s; /* Smooth background transition */
 }
