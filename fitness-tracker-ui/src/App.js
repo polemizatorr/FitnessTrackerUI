@@ -14,6 +14,7 @@ import ErrorPage from './components/ErrorPage/ErrorPage';
 import CreateSet from './components/CreateSet/CreateSet';
 import CreateStrengthTraining from './components/CreateStrengthTraining/CreateStrengthTraining';
 import Unauthorized from './components/Unauthorized/Unauthorized';
+import VerifyUser  from './components/VerifyUser/VerifyUser';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         <Route path="/strength/:id" element={useLayout(<StregthTrainingDetails />)} /> 
         <Route path="/create-new-strength-training" element={useLayout(<CreateStrengthTraining />)} /> 
         <Route path="/set-create-new/:id" element={useLayout(<CreateSet />)} /> 
+        <Route path="/verify" element={useLayout(<VerifyUser />)} /> 
         <Route path="/unauthorized" element={useLayout(<Unauthorized/>)} /> 
         <Route path="*" element={useLayout(<ErrorPage/>)} /> 
       </Routes>
