@@ -13,6 +13,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const StregthTrainingDetails = () => {
 
@@ -87,7 +89,7 @@ const StregthTrainingDetails = () => {
               <TableCell align="left">{set.exhaustionLevel}</TableCell>
               <TableCell align="left">{set.weight}</TableCell>
               <TableCell align="left">
-                <Button color="primary" onClick={() => {deleteSetById(set.setId)}}> Delete</Button>
+                <Button color="primary" onClick={() => {deleteSetById(set.setId)}}> <FontAwesomeIcon icon={faTrash} title='Delete' className={styles.IconsSize} /></Button>
               </TableCell>
                 
             </TableRow>
@@ -95,7 +97,24 @@ const StregthTrainingDetails = () => {
         </TableBody>
       </Table>
     </TableContainer>
-    <Button color="primary" onClick={() => {navigate('/set-create-new/' + training.strenghtTrainingId)}}> Add Set</Button>
+
+    <div style={{ position: 'fixed', bottom: '7em', right: '3em' }}>
+      <Button 
+          variant="fab" 
+          color="primary" 
+          onClick={() => {navigate('/set-create-new/' + training.strenghtTrainingId)}} 
+          className={styles.circularButton}
+          sx={{
+            border: '2px solid #1976d2', // Set the border color (blue in this case)
+            borderRadius: '50%', // Makes the button circular
+            '&:hover': {
+                backgroundColor: '#f0f0f0', // Change background on hover
+            },
+        }}
+      >
+          <FontAwesomeIcon icon={faPlus} title='Add New Set' size='2x' color='#1976d2' />
+      </Button>
+    </div>
 
     </div>
       

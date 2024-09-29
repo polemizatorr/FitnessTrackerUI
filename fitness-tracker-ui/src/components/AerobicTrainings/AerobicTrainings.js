@@ -11,7 +11,12 @@ import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import '../AerobicTrainings/AerobicTrainings.module.css'
+import styles from '../AerobicTrainings/AerobicTrainings.module.css'; // Use 'styles' to reference the imported module
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const AerobicTrainings = () => {
 
@@ -99,9 +104,9 @@ const AerobicTrainings = () => {
               <TableCell align="left">{training.calorieBurnt}</TableCell>
               <TableCell align="left">{new Date(training.activityDate).toLocaleDateString()}</TableCell>
               <TableCell align="left"> 
-                <Button color="primary" onClick={() => {viewTraining(training.aerobicTrainingId)}}> View</Button> 
-                <Button color="primary" onClick={() => {editTraining(training.aerobicTrainingId)}}> Edit</Button> 
-                <Button color="primary" onClick={() => {deleteTraining(training.aerobicTrainingId)}}> Delete</Button> 
+                <Button color="primary" onClick={() => {viewTraining(training.aerobicTrainingId)}}> <FontAwesomeIcon icon={faEye} title='View' className={styles.IconsSize} /></Button> 
+                <Button color="primary" onClick={() => {editTraining(training.aerobicTrainingId)}}> <FontAwesomeIcon icon={faEdit} title='Edit' className={styles.IconsSize} /> </Button> 
+                <Button color="primary" onClick={() => {deleteTraining(training.aerobicTrainingId)}}> <FontAwesomeIcon icon={faTrash} title='Delete' className={styles.IconsSize} /></Button> 
               </TableCell>
               
             </TableRow>
@@ -110,7 +115,23 @@ const AerobicTrainings = () => {
       </Table>
     </TableContainer>
 
-    <Button color="primary" onClick={() => {createTrainingView()}}> Create Training</Button> 
+    <div style={{ position: 'fixed', bottom: '7em', right: '3em' }}>
+      <Button 
+          variant="fab" 
+          color="primary" 
+          onClick={() => {createTrainingView()}} 
+          className={styles.circularButton}
+          sx={{
+            border: '2px solid #1976d2', // Set the border color (blue in this case)
+            borderRadius: '50%', // Makes the button circular
+            '&:hover': {
+                backgroundColor: '#f0f0f0', // Change background on hover
+            },
+        }}
+      >
+          <FontAwesomeIcon icon={faPlus} title='Add New Training' size='2x' color='#1976d2' />
+      </Button>
+    </div>
     
     </>
     

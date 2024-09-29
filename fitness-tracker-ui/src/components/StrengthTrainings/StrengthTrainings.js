@@ -12,6 +12,10 @@ import { getStrengthTrainings, deleteStrengthTraining, getStrengthTrainingsForUs
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const StrengthTrainings = () => {
 
@@ -82,8 +86,8 @@ const StrengthTrainings = () => {
               <TableCell align="left">{training.trainingName}</TableCell>
               <TableCell align="left">{new Date(training.trainingDate).toLocaleDateString()}</TableCell>
               <TableCell align="left">
-                <Button color="primary" onClick={() => {navigateToTraining(training.strenghtTrainingId)}}> View</Button> 
-                <Button color="primary" onClick={() => {deleteTraining(training.strenghtTrainingId)}}> Delete</Button> 
+                <Button color="primary" onClick={() => {navigateToTraining(training.strenghtTrainingId)}}> <FontAwesomeIcon icon={faEye} title='View' className={styles.IconsSize} /></Button> 
+                <Button color="primary" onClick={() => {deleteTraining(training.strenghtTrainingId)}}> <FontAwesomeIcon icon={faTrash} title='Delete' className={styles.IconsSize} /></Button> 
               </TableCell>
               
             </TableRow>
@@ -91,7 +95,24 @@ const StrengthTrainings = () => {
         </TableBody>
       </Table>
     </TableContainer>
-    <Button color="primary" onClick={() => {createTraining()}}> Add Training</Button> 
+
+    <div style={{ position: 'fixed', bottom: '7em', right: '3em' }}>
+      <Button 
+          variant="fab" 
+          color="primary" 
+          onClick={() => {createTraining()}} 
+          className={styles.circularButton}
+          sx={{
+            border: '2px solid #1976d2', // Set the border color (blue in this case)
+            borderRadius: '50%', // Makes the button circular
+            '&:hover': {
+                backgroundColor: '#f0f0f0', // Change background on hover
+            },
+        }}
+      >
+          <FontAwesomeIcon icon={faPlus} title='Add New Training' size='2x' color='#1976d2' />
+      </Button>
+    </div>
     </>
   )
 };
