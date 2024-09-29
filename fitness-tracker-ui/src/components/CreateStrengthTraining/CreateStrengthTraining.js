@@ -5,7 +5,7 @@ import { createStrengthTraining } from '../../Services/TrainingsService';
 import { useNavigate } from 'react-router';
 
 
-const CreateStrengthTraining = () => {
+const CreateStrengthTraining = ({isModalOpen, onCloseModal}) => {
 
   const [trainingName, setTrainingName] = useState('');
   const [trainingDate, setTrainingDate] = useState('');
@@ -15,17 +15,16 @@ const CreateStrengthTraining = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
 
     await createStrengthTraining({trainingName: trainingName, trainingDate: trainingDate});
+    setTimeout(() => { onCloseModal(); }, 100);
     navigate("/strength");
-    // You can add further logic like sending data to an API, etc.
   };
 
   return (
     <>
     <div className={styles.CreateStrengthTraining}>
-      CreateStrengthTraining Component
+      <h2>Add Strength Training</h2>
     </div>
     <form onSubmit={handleSubmit}>
         <div>
@@ -37,7 +36,7 @@ const CreateStrengthTraining = () => {
             onChange={(e) => setTrainingName(e.target.value)}
             required />
         </div>
-        <div>
+        <div style={{ marginBottom: '20px' }}>
           <label htmlFor="trainingDate">Training Date:</label>
           <input
             type="date"

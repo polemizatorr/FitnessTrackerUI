@@ -16,3 +16,16 @@
     cursor: pointer; /* Pointer cursor */
     transition: background-color 0.3s; /* Smooth background transition */
 }
+
+.modalStyle{
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; /* Set custom width */
+  height: 500px; /* Set custom height */
+  background-color: white;
+  padding: 20px;
+  box-shadow: 24px;
+  border-radius: 8px;
+}
