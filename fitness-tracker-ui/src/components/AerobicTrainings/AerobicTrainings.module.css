@@ -3,6 +3,7 @@
 .Header {
     display: flex;
     justify-content: center;
+    margin-bottom: 2rem;
 }
 
 h2 
@@ -11,4 +12,5 @@ h2
     display: block; /* This is the default for h2 elements */
     margin: 0 auto; /* Auto left and right margins center the block */
     width: fit-content; /* Adjusts the width to fit its content */
+    margin-bottom: 1rem;
 }

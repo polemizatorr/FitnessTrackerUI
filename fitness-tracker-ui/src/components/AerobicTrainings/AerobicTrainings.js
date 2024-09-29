@@ -72,7 +72,8 @@ const AerobicTrainings = () => {
     <>
     <div className='Header'>
       <h2> Aerobic Trainings</h2>
-    </div>
+    </div> 
+
     
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">

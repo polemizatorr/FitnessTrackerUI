@@ -1,5 +1,15 @@
 .Layout {}
 
-.footer {
-    flex-shrink: 0;
+.content {
+    flex: 1; /* Allows the content to grow and fill space between header and footer */
 }
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full height of the viewport */
+}
+
+/* .top-nav{
+    margin-bottom: 10px;
+} */

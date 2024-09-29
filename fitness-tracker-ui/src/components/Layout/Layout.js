@@ -8,13 +8,23 @@ const Layout = ({ children }) => {
 
 
   return (
-  <>
-  <TopNavigation />
-  { children }
-
-
-  <Footer />
-  </>
+    <div className="main-layout">
+      <>
+      <div className="top-nav">
+        <TopNavigation />
+      </div>
+      
+      <div className="main-content">
+        { children }
+      </div>
+      
+      <div className='footer'>
+        <Footer />
+      </div>
+      
+      </>
+    </div>
+  
   )
 };
 
