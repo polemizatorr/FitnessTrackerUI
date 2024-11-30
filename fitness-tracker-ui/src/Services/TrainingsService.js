@@ -66,6 +66,31 @@ export const deleteAerobicTraining = async (id) => {
     }
 }
 
+export const exportAllAerobicTrainings = async () => {
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Authorization': "Bearer " + token
+    };
+
+    try {
+        const res = await axios.get(API_URL + "/AerobicTrainings/export", { headers: headers, responseType: 'blob' })
+
+        let date = getCurrentDate();
+        const file = new Blob([res.data], { type: 'application/json' });
+        const fileURL = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.download = 'Aerobic Trainings ' + date + '.json';
+        link.click();
+        URL.revokeObjectURL(fileURL);
+        return res;
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 // Strength trainings
 export const getStrengthTrainings = async () => {
     try {
@@ -119,6 +144,31 @@ export const deleteStrengthTraining = async (id) => {
     }
 }
 
+export const exportAllStrengthTrainings = async () => {
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Authorization': "Bearer " + token
+    };
+
+    try {
+        const res = await axios.get(API_URL + "/StrengthTrainings/export", { headers: headers, responseType: 'blob' })
+        
+        let date = getCurrentDate();
+        const file = new Blob([res.data], { type: 'application/json' });
+        const fileURL = URL.createObjectURL(file);
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.download = 'Strength Trainings ' + date + '.json';
+        link.click();
+        URL.revokeObjectURL(fileURL);
+        return res;
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 // Sets
 
 export const createSet = async (strengthTrainingId, setData) => {
@@ -144,4 +194,18 @@ export const deleteSet = async (id) => {
     } catch (err) {
         console.log(err);
     }
+}
+
+const getCurrentDate = () => {
+    let now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    const customDateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    return customDateTimeString;
 }

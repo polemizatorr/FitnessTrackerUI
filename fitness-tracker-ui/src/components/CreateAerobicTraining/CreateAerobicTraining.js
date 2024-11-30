@@ -5,7 +5,7 @@ import { createAerobicTraining } from '../../Services/TrainingsService';
 import './CreateAerobicTraining.module.css';
 import { useNavigate } from 'react-router-dom';
 
-const CreateAerobicTraining = () => {
+const CreateAerobicTraining = ({isModalOpen, onCloseModal}) => {
 
   const [activityType, setActivityType] = useState('');
   const [activityDurationMinutes, setActivityDurationMinutes] = useState('');
@@ -24,6 +24,7 @@ const CreateAerobicTraining = () => {
 
     // Try Catch?
     createAerobicTraining(activityData);
+    setTimeout(() => { onCloseModal(); }, 100);
 
     navigate("/aerobic");
     // You can send this data to your server or API here
@@ -62,7 +63,7 @@ const CreateAerobicTraining = () => {
             onChange={(e) => setCalorieBurnt(e.target.value)}
             required />
         </div>
-        <div>
+        <div style={{ marginBottom: '20px' }}>
           <label htmlFor="activityDate">Date</label>
           <input
             type="datetime-local"

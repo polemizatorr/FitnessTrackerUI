@@ -1,17 +1,21 @@
 .AerobicTrainings {}
 
 .Header {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
+    flex-grow: 1; 
+    text-align: center; 
 }
+
+.ExportButton {
+    margin-left: auto;
+    margin-right: 10px;
+  }
 
 h2 
 {
     text-align: center;
-    display: block; /* This is the default for h2 elements */
-    margin: 0 auto; /* Auto left and right margins center the block */
-    width: fit-content; /* Adjusts the width to fit its content */
+    display: block;
+    margin: 0 auto;
+    width: fit-content; 
     margin-bottom: 1rem;
 }
 
@@ -20,14 +24,35 @@ h2
 }
 
 .circularButton {
-    border: 2px solid #1976d2; /* Black border */
-    border-radius: 50%; /* Circular shape */
-    width: 56px; /* Set width */
-    height: 56px; /* Set height */
+    border: 2px solid #1976d2;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white; /* Button background */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s; /* Smooth background transition */
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modalStyle{
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 500px;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 24px;
+  border-radius: 8px;
+}
+
+.customCell {
+   height: 1em;
+}
+
+.HeaderContainer {
+    display: flex;
 }

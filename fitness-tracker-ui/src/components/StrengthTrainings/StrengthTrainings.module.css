@@ -12,7 +12,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white; /* Button background */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s; /* Smooth background transition */
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modalStyle{
+    position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 500px;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 24px;
+  border-radius: 8px;
+}
+
+.Header {
+    flex-grow: 1; 
+    text-align: center; 
+    
+}
+
+.ExportButton {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+
+  .HeaderContainer {
+    display: flex;
 }
