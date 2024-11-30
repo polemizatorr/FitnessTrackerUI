@@ -12,7 +12,7 @@ import {
   Box,
   TablePagination,
 } from '@mui/material';
-import { getAerobicTrainingsForUser, deleteAerobicTraining } from '../../Services/TrainingsService';
+import { getAerobicTrainingsForUser, deleteAerobicTraining, exportAllAerobicTrainings } from '../../Services/TrainingsService';
 import { useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../AerobicTrainings/AerobicTrainings.module.css';
@@ -49,6 +49,11 @@ const AerobicTrainings = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset to first page
   };
+
+  const exportTrainingsToFile = async () => {
+    const res = await exportAllAerobicTrainings();
+    console.log(res);
+  }
 
   const fetchData = async () => {
     try {
@@ -94,9 +99,16 @@ const AerobicTrainings = () => {
 
   return (
     <>
-      <div className='Header'>
-        <h2>Aerobic Trainings</h2>
+      <div className={styles.HeaderContainer}>
+        <div className={styles.Header}>
+          <h2>Aerobic Trainings</h2>
+        </div>
+
+        <div className={styles.ExportButton}>
+          <Button size='large' onClick={exportTrainingsToFile}> Export </Button>
+        </div>
       </div>
+      
 
       <div>
         <Modal

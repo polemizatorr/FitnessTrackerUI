@@ -13,7 +13,7 @@ import {
   TablePagination,
 } from '@mui/material';
 import styles from '../StrengthTrainings/StrengthTrainings.module.css'
-import { getStrengthTrainings, deleteStrengthTraining, getStrengthTrainingsForUser, createStrengthTraining } from '../../Services/TrainingsService';
+import { getStrengthTrainings, deleteStrengthTraining, getStrengthTrainingsForUser, createStrengthTraining, exportAllStrengthTrainings } from '../../Services/TrainingsService';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -21,7 +21,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import Divider from '@mui/material/Divider';
 import CreateStrengthTraining from '../CreateStrengthTraining/CreateStrengthTraining';
 
 const StrengthTrainings = () => {
@@ -53,6 +52,10 @@ const StrengthTrainings = () => {
     fetchData(); // Refresh the data after modal close
     setOpen(false);
   };
+
+  const exportTrainingsToFile = async () => {
+    await exportAllStrengthTrainings();
+  }
 
   const fetchData = async () => {
     await getStrengthTrainingsForUser(username)
@@ -93,7 +96,15 @@ const StrengthTrainings = () => {
 
   return (
     <>
-      <h2>Strength Trainings</h2>
+      <div className={styles.HeaderContainer}>
+        <div className={styles.Header}>
+          <h2>Aerobic Trainings</h2>
+        </div>
+
+        <div className={styles.ExportButton}>
+          <Button size='large' onClick={exportTrainingsToFile}> Export </Button>
+        </div>
+      </div>
 
       <div>
         <Modal
@@ -122,7 +133,6 @@ const StrengthTrainings = () => {
             {paginatedTrainings.map((training, index) => (
               <TableRow
                 key={training.strenghtTrainingId}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell> {/* Adjust index */}
                 <TableCell align="left">{training.trainingName}</TableCell>
@@ -139,7 +149,7 @@ const StrengthTrainings = () => {
             ))}
           </TableBody>
         </Table>
-        <Divider style={{ margin: '16px 0', backgroundColor: 'gray' }} />
+
         <TablePagination
           rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
           count={trainings.length}

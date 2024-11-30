@@ -20,7 +20,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
-import Divider from '@mui/material/Divider';
 import CreateSet from '../CreateSet/CreateSet';
 
 const StregthTrainingDetails = () => {
@@ -115,7 +114,6 @@ const StregthTrainingDetails = () => {
               {paginatedSets.map((set, index) => (
                 <TableRow
                   key={set.setId}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell> {/* Adjust index */}
                   <TableCell align="left" component="th" scope="row">
@@ -133,8 +131,7 @@ const StregthTrainingDetails = () => {
               ))}
             </TableBody>
           </Table>
-          {/* Add the Divider here */}
-          <Divider style={{ margin: '16px 0', backgroundColor: 'gray' }} />
+
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
             count={training.sets ? training.sets.length : 0}
