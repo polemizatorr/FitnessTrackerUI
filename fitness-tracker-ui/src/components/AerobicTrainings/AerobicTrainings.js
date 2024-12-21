@@ -144,9 +144,9 @@ const AerobicTrainings = () => {
                 <TableCell align="left">{training.calorieBurnt}</TableCell>
                 <TableCell align="left">{new Date(training.activityDate).toLocaleDateString()}</TableCell>
                 <TableCell align="left">
-                  <Button color="primary" onClick={() => viewTraining(training.aerobicTrainingId)}>
+                  {/* <Button color="primary" onClick={() => viewTraining(training.aerobicTrainingId)}>
                     <FontAwesomeIcon icon={faEye} title='View' className={styles.IconsSize} />
-                  </Button>
+                  </Button> */}
                   <Button color="primary" onClick={() => editTraining(training.aerobicTrainingId)}>
                     <FontAwesomeIcon icon={faEdit} title='Edit' className={styles.IconsSize} />
                   </Button>
