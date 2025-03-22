@@ -10,8 +10,8 @@ services:
     networks:
       - my_network
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__FitnessDatabase=Server=db;Database=FitnessTracker;User Id=sa;Password=<YourStrong!Passw0rd>;
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ConnectionStrings__FitnessDatabase=${FITNESS_DB_CONNECTION}
     depends_on:
       - db
 
@@ -29,7 +29,7 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      SA_PASSWORD: "<YourStrong!Passw0rd>"
+      SA_PASSWORD: ${DB_SA_PASSWORD}
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
