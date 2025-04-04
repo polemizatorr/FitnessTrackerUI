@@ -41,6 +41,7 @@ App overview:
 ![image](https://github.com/user-attachments/assets/8c958acd-2cd7-4a82-a9b3-1a9b06e47f00)
 
 - Strength Trainings Pages
-![image](https://github.com/user-attachments/assets/9d9e2108-892c-442d-848b-0ebc5836523e)
+![image](https://github.com/user-attachments/assets/8ab6b5a1-dbdd-4b5c-869d-566743f2e0d9)
+
 
 
