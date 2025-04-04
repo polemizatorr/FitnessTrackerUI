@@ -1,4 +1,4 @@
-# FitnessTrackerUI
+![image](https://github.com/user-attachments/assets/46d84e56-d9ec-4597-b2a2-3adcdca43be9)# FitnessTrackerUI
 
 🏋️‍♂️ FitnessTracker
 FitnessTracker is a powerful and user-friendly application designed to help users track and manage their fitness journey. Whether you’re into cardio or strength training, FitnessTracker makes it easy to log your workouts and monitor progress over time.
@@ -27,3 +27,24 @@ Easy navigation and quick access to your training logs.
 
 💪 Why Choose FitnessTracker?
 FitnessTracker helps you stay motivated and consistent by keeping a detailed log of your fitness activities. Whether your goal is to improve endurance or build strength, this app supports your journey to a healthier lifestyle.
+
+
+App overview:
+
+- Login Page
+
+![image](https://github.com/user-attachments/assets/94ab389a-bef8-4e83-a307-4327fdb4ff71)
+
+- Register Page
+- 
+![image](https://github.com/user-attachments/assets/c03fd2f1-6a50-4c48-bb7f-a1bc32be1cc8)
+
+- Aerobic Trainings Page
+- 
+![image](https://github.com/user-attachments/assets/8c958acd-2cd7-4a82-a9b3-1a9b06e47f00)
+
+- Strength Trainings Pages
+- 
+![image](https://github.com/user-attachments/assets/9d9e2108-892c-442d-848b-0ebc5836523e)
+
+
