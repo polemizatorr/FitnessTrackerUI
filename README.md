@@ -32,19 +32,15 @@ FitnessTracker helps you stay motivated and consistent by keeping a detailed log
 App overview:
 
 - Login Page
-
 ![image](https://github.com/user-attachments/assets/94ab389a-bef8-4e83-a307-4327fdb4ff71)
 
 - Register Page
-- 
 ![image](https://github.com/user-attachments/assets/c03fd2f1-6a50-4c48-bb7f-a1bc32be1cc8)
 
 - Aerobic Trainings Page
-- 
 ![image](https://github.com/user-attachments/assets/8c958acd-2cd7-4a82-a9b3-1a9b06e47f00)
 
 - Strength Trainings Pages
-- 
 ![image](https://github.com/user-attachments/assets/9d9e2108-892c-442d-848b-0ebc5836523e)
 
 
