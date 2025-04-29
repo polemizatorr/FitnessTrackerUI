@@ -48,9 +48,9 @@ const Login = () => {
     <br></br>
     <form onSubmit={handleLogin}>
         Username: <br></br>
-        <TextField  value={username} onChange={e => setUsername(e.target.value)} type="text" variant='outlined' /> <br></br>
+        <TextField  value={username} onChange={e => setUsername(e.target.value)} type="text" variant='outlined' data-cy="username-login-input" /> <br></br>
         Password: <br></br>
-        <TextField value={password} onChange={e => setPassword(e.target.value)} type="password" variant='outlined' /> <br></br>
+        <TextField value={password} onChange={e => setPassword(e.target.value)} type="password" variant='outlined' data-cy="password-login-input" /> <br></br>
 
         <Button variant="outlined" color="secondary" type="submit">Login</Button>
     </form>
