@@ -53,15 +53,15 @@ const Register = () => {
     <br></br><br></br>
     <form onSubmit={handleRegister}>
         Username: <br></br>
-        <TextField  value={username} onChange={e => setUsername(e.target.value)} type="text" variant='outlined' /> <br></br>
+        <TextField  value={username} onChange={e => setUsername(e.target.value)} type="text" variant='outlined' data-cy="username-input" /> <br></br>
         Password: <br></br>
-        <TextField value={password} onChange={e => setPassword(e.target.value)} type="password" variant='outlined' /> <br></br>
+        <TextField value={password} onChange={e => setPassword(e.target.value)} type="password" variant='outlined' data-cy="password-input" /> <br></br>
         Email: <br></br>
-        <TextField  value={email} onChange={e => setEmail(e.target.value)} type="text" variant='outlined' /> <br></br>
+        <TextField  value={email} onChange={e => setEmail(e.target.value)} type="text" variant='outlined' data-cy="email-input" /> <br></br>
         Firstname: <br></br>
-        <TextField value={firstname} onChange={e => setFirstname(e.target.value)} type="text" variant='outlined' /> <br></br>
+        <TextField value={firstname} onChange={e => setFirstname(e.target.value)} type="text" variant='outlined' data-cy="firstname-input" /> <br></br>
         Lastname: <br></br>
-        <TextField  value={lastname} onChange={e => setLastname(e.target.value)} type="text" variant='outlined' /> <br></br>
+        <TextField  value={lastname} onChange={e => setLastname(e.target.value)} type="text" variant='outlined' data-cy="lastname-input" /> <br></br>
 
         <Button variant="outlined" color="secondary" type="submit">Register</Button>
     </form>
