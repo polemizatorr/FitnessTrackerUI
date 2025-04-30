@@ -120,20 +120,34 @@ export const getStrengthTraining = async (id) => {
 }
 
 export const createStrengthTraining = async (data) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer " + token,
+  };
 
-    const token = localStorage.getItem('token');
-    const headers = {
+  try {
+    const res = await axios.post(API_URL + "/StrengthTrainings", data, { headers: headers });
+    return res;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const editStrengthTraining = async (id, data) => {
+  try {
+    const response = await axios.put(`${API_URL}/strength/${id}`, data, {
+      headers: {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token,
-    };
-
-    try {
-        const res = await axios.post(API_URL + "/StrengthTrainings", data, { headers: headers });
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-}
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error editing strength training:', error);
+    throw error;
+  }
+};
 
 export const deleteStrengthTraining = async (id) => {
     try {
@@ -195,6 +209,34 @@ export const deleteSet = async (id) => {
         console.log(err);
     }
 }
+
+export const editStrengthTrainingSet = async (id, data) => {
+  try {
+    const response = await axios.put(`${API_URL}/strength/set/${id}`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error editing strength training set:', error);
+    throw error;
+  }
+};
+
+export const createStrengthTrainingSet = async (trainingId, data) => {
+  try {
+    const response = await axios.post(`${API_URL}/strength/${trainingId}/set`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating strength training set:', error);
+    throw error;
+  }
+};
 
 const getCurrentDate = () => {
     let now = new Date();
