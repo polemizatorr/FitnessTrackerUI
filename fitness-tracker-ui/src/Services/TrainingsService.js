@@ -30,23 +30,28 @@ export const getAerobicTraining = async (id) => {
     }
 }
 
-export const createAerobicTraining = async (aerobicTraining) => {
+export const createAerobicTraining = async (data) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer " + token,
+  };
 
-    const token = localStorage.getItem('token');
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token,
-    };
+  const requestData = {
+    ActivityType: data.activityType,
+    ActivityDurationMinutes: parseInt(data.activityDurationMinutes),
+    CalorieBurnt: parseInt(data.calorieBurnt),
+    ActivityDate: data.activityDate
+  };
 
-    try {
-        const res = await axios.post(API_URL + "/AerobicTrainings", aerobicTraining, {
-            headers: headers
-          });
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-}
+  try {
+    const res = await axios.post(API_URL + "/AerobicTrainings", requestData, { headers });
+    return res;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 
 export const editAerobicTraining = async (id, aerobicTraining) => {
     try {
@@ -137,7 +142,7 @@ export const createStrengthTraining = async (data) => {
 
 export const editStrengthTraining = async (id, data) => {
   try {
-    const response = await axios.put(`${API_URL}/strength/${id}`, data, {
+    const response = await axios.put(`${API_URL}/StrengthTrainings/${id}`, data, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -194,7 +199,7 @@ export const createSet = async (strengthTrainingId, setData) => {
     };
 
     try {
-        const res = await axios.post(API_URL + "/Sets/" + strengthTrainingId, setData, {headers: headers});
+        const res = await axios.post(API_URL + "/Sets/" + strengthTrainingId, setData, { headers: headers });
         return res;
     } catch (err) {
         console.log(err);
@@ -212,7 +217,7 @@ export const deleteSet = async (id) => {
 
 export const editStrengthTrainingSet = async (id, data) => {
   try {
-    const response = await axios.put(`${API_URL}/strength/set/${id}`, data, {
+    const response = await axios.put(`${API_URL}/sets/${id}`, data, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -225,12 +230,14 @@ export const editStrengthTrainingSet = async (id, data) => {
 };
 
 export const createStrengthTrainingSet = async (trainingId, data) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer " + token,
+  };
+
   try {
-    const response = await axios.post(`${API_URL}/strength/${trainingId}/set`, data, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await axios.post(`${API_URL}/sets/${trainingId}`, data, { headers });
     return response.data;
   } catch (error) {
     console.error('Error creating strength training set:', error);

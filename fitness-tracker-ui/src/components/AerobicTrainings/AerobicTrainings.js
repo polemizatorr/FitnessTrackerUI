@@ -65,11 +65,16 @@ const AerobicTrainings = () => {
 
   const handleEditClick = (training) => {
     setEditingId(training.aerobicTrainingId);
+    const date = new Date(training.activityDate);
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    const formattedDate = adjustedDate.toISOString().split('T')[0];
+    
     setEditFormData({
       activityType: training.activityType,
       activityDurationMinutes: training.activityDurationMinutes,
       calorieBurnt: training.calorieBurnt,
-      activityDate: training.activityDate
+      activityDate: formattedDate
     });
   };
 
@@ -152,10 +157,12 @@ const AerobicTrainings = () => {
   const handleAddTrainingSave = async () => {
     try {
       const formattedData = {
-        ...newTrainingFormData,
-        activityDurationMinutes: parseInt(newTrainingFormData.activityDurationMinutes, 10),
-        calorieBurnt: parseInt(newTrainingFormData.calorieBurnt, 10)
+        activityDate: newTrainingFormData.activityDate,
+        activityType: newTrainingFormData.activityType,
+        activityDurationMinutes: newTrainingFormData.activityDurationMinutes,
+        calorieBurnt: newTrainingFormData.calorieBurnt
       };
+      console.log(formattedData)
       const response = await createAerobicTraining(formattedData);
       setIsAddingTraining(false);
       fetchData();
@@ -239,8 +246,8 @@ const AerobicTrainings = () => {
                   <TableCell align="left">New</TableCell>
                   <TableCell align="left">
                     <TextField
-                      name="trainingName"
-                      value={newTrainingFormData.trainingName}
+                      name="activityType"
+                      value={newTrainingFormData.activityType}
                       onChange={handleNewTrainingFormChange}
                       size="small"
                       fullWidth
@@ -249,9 +256,9 @@ const AerobicTrainings = () => {
                   </TableCell>
                   <TableCell align="left">
                     <TextField
-                      name="trainingDate"
+                      name="activityDate"
                       type="date"
-                      value={newTrainingFormData.trainingDate}
+                      value={newTrainingFormData.activityDate}
                       onChange={handleNewTrainingFormChange}
                       size="small"
                       InputLabelProps={{ shrink: true }}
@@ -259,9 +266,9 @@ const AerobicTrainings = () => {
                   </TableCell>
                   <TableCell align="left">
                     <TextField
-                      name="duration"
+                      name="activityDurationMinutes"
                       type="number"
-                      value={newTrainingFormData.duration}
+                      value={newTrainingFormData.activityDurationMinutes}
                       onChange={handleNewTrainingFormChange}
                       size="small"
                       sx={{ width: '80px' }}
@@ -269,9 +276,9 @@ const AerobicTrainings = () => {
                   </TableCell>
                   <TableCell align="left">
                     <TextField
-                      name="calories"
+                      name="calorieBurnt"
                       type="number"
-                      value={newTrainingFormData.calories}
+                      value={newTrainingFormData.calorieBurnt}
                       onChange={handleNewTrainingFormChange}
                       size="small"
                       sx={{ width: '80px' }}
@@ -316,8 +323,8 @@ const AerobicTrainings = () => {
                   <TableCell align="left" sx={{ fontWeight: 500 }}>
                     {editingId === training.aerobicTrainingId ? (
                       <TextField
-                        name="trainingName"
-                        value={editFormData.trainingName}
+                        name="activityType"
+                        value={editFormData.activityType}
                         onChange={handleEditFormChange}
                         size="small"
                         fullWidth
@@ -330,9 +337,9 @@ const AerobicTrainings = () => {
                   <TableCell align="left">
                     {editingId === training.aerobicTrainingId ? (
                       <TextField
-                        name="trainingDate"
+                        name="activityDate"
                         type="date"
-                        value={editFormData.trainingDate}
+                        value={editFormData.activityDate}
                         onChange={handleEditFormChange}
                         size="small"
                         InputLabelProps={{ shrink: true }}
@@ -345,9 +352,9 @@ const AerobicTrainings = () => {
                   <TableCell align="left">
                     {editingId === training.aerobicTrainingId ? (
                       <TextField
-                        name="duration"
+                        name="activityDurationMinutes"
                         type="number"
-                        value={editFormData.duration}
+                        value={editFormData.activityDurationMinutes}
                         onChange={handleEditFormChange}
                         size="small"
                         sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
@@ -359,9 +366,9 @@ const AerobicTrainings = () => {
                   <TableCell align="left">
                     {editingId === training.aerobicTrainingId ? (
                       <TextField
-                        name="calories"
+                        name="calorieBurnt"
                         type="number"
-                        value={editFormData.calories}
+                        value={editFormData.calorieBurnt}
                         onChange={handleEditFormChange}
                         size="small"
                         sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
@@ -577,11 +584,12 @@ const AerobicTrainings = () => {
                   {editingId === training.aerobicTrainingId ? (
                     <TextField
                       name="activityDate"
-                      type="datetime-local"
+                      type="date"
                       value={editFormData.activityDate}
                       onChange={handleEditFormChange}
                       size="small"
                       InputLabelProps={{ shrink: true }}
+                      sx={{ width: '150px' }}
                     />
                   ) : (
                     new Date(training.activityDate).toLocaleDateString('en-US', {

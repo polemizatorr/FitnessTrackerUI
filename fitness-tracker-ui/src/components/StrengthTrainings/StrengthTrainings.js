@@ -48,6 +48,7 @@ const StrengthTrainings = () => {
   });
   const [editingSetId, setEditingSetId] = useState(null);
   const [editSetFormData, setEditSetFormData] = useState({
+    setId: '',
     exerciseName: '',
     repetitionsNumber: '',
     weight: '',
@@ -55,6 +56,7 @@ const StrengthTrainings = () => {
   });
   const [addingSetId, setAddingSetId] = useState(null);
   const [newSetFormData, setNewSetFormData] = useState({
+    setId: '',
     exerciseName: '',
     repetitionsNumber: '',
     weight: '',
@@ -96,6 +98,7 @@ const StrengthTrainings = () => {
   };
 
   const handleEditFormChange = (event) => {
+    console.log(event)
     const { name, value } = event.target;
     setEditFormData(prev => ({
       ...prev,
@@ -116,6 +119,7 @@ const StrengthTrainings = () => {
   const handleSetEditClick = (set) => {
     setEditingSetId(set.setId);
     setEditSetFormData({
+      setId: set.setId,
       exerciseName: set.exerciseName,
       repetitionsNumber: set.repetitionsNumber,
       weight: set.weight,
@@ -127,17 +131,23 @@ const StrengthTrainings = () => {
     setEditingSetId(null);
   };
 
-  const handleSetFormChange = (event) => {
+  const handleSetFormChange = (event, setId) => {
     const { name, value } = event.target;
     setEditSetFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
+      setId: setId
     }));
   };
 
   const handleSetSaveClick = async (setId) => {
     try {
-      await editStrengthTrainingSet(setId, editSetFormData);
+      console.log('handleSetSaveClick', editSetFormData, setId)
+      const dataToSend = {
+        ...editSetFormData,
+        setId: setId
+      };
+      await editStrengthTrainingSet(setId, dataToSend);
       setEditingSetId(null);
       fetchData();
     } catch (error) {
@@ -218,7 +228,7 @@ const StrengthTrainings = () => {
     setNewTrainingFormData({
       trainingName: '',
       trainingDate: new Date().toISOString().split('T')[0]
-    });
+      });
   };
 
   const handleNewTrainingFormChange = (event) => {
@@ -300,9 +310,9 @@ const StrengthTrainings = () => {
       </div>
 
       {viewMode === 'table' ? (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
               <TableRow sx={{ 
                 backgroundColor: '#f5f5f5',
                 '& th': {
@@ -313,13 +323,13 @@ const StrengthTrainings = () => {
                   borderBottom: '2px solid #e0e0e0'
                 }
               }}>
-                <TableCell align="left">Id</TableCell>
-                <TableCell align="left">Training Name</TableCell>
-                <TableCell align="left">Training Date</TableCell>
-                <TableCell align="left">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
+              <TableCell align="left">Id</TableCell>
+              <TableCell align="left">Training Name</TableCell>
+              <TableCell align="left">Training Date</TableCell>
+              <TableCell align="left">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
               {isAddingTraining && (
                 <TableRow>
                   <TableCell align="left">New</TableCell>
@@ -363,7 +373,7 @@ const StrengthTrainings = () => {
                   </TableCell>
                 </TableRow>
               )}
-              {paginatedTrainings.map((training, index) => (
+            {paginatedTrainings.map((training, index) => (
                 <React.Fragment key={training.strenghtTrainingId}>
                   <TableRow>
                     <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell>
@@ -472,7 +482,7 @@ const StrengthTrainings = () => {
                                 </TableHead>
                                 <TableBody>
                                   {training.sets.map((set, setIndex) => (
-                                    <TableRow 
+              <TableRow
                                       key={set.setId}
                                       sx={{ 
                                         '&:nth-of-type(odd)': { backgroundColor: '#fafafa' },
@@ -491,7 +501,7 @@ const StrengthTrainings = () => {
                                           <TextField
                                             name="exerciseName"
                                             value={editSetFormData.exerciseName}
-                                            onChange={handleSetFormChange}
+                                            onChange={(e) => handleSetFormChange(e, set.setId)}
                                             size="small"
                                             fullWidth
                                             sx={{ '& .MuiInputBase-root': { height: '32px' } }}
@@ -506,7 +516,7 @@ const StrengthTrainings = () => {
                                             name="repetitionsNumber"
                                             type="number"
                                             value={editSetFormData.repetitionsNumber}
-                                            onChange={handleSetFormChange}
+                                            onChange={(e) => handleSetFormChange(e, set.setId)}
                                             size="small"
                                             sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                                           />
@@ -520,7 +530,7 @@ const StrengthTrainings = () => {
                                             name="weight"
                                             type="number"
                                             value={editSetFormData.weight}
-                                            onChange={handleSetFormChange}
+                                            onChange={(e) => handleSetFormChange(e, set.setId)}
                                             size="small"
                                             sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                                           />
@@ -534,7 +544,7 @@ const StrengthTrainings = () => {
                                             name="exhaustionLevel"
                                             type="number"
                                             value={editSetFormData.exhaustionLevel}
-                                            onChange={handleSetFormChange}
+                                            onChange={(e) => handleSetFormChange(e, set.setId)}
                                             size="small"
                                             sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                                           />
@@ -588,21 +598,21 @@ const StrengthTrainings = () => {
                                               size="small"
                                             >
                                               <FontAwesomeIcon icon={faEdit} title='Edit' className={styles.IconsSize} />
-                                            </Button>
+                  </Button>
                                             <Button
                                               color="error"
                                               onClick={() => handleDeleteSet(set.setId)}
                                               size="small"
                                             >
-                                              <FontAwesomeIcon icon={faTrash} title='Delete' className={styles.IconsSize} />
-                                            </Button>
+                    <FontAwesomeIcon icon={faTrash} title='Delete' className={styles.IconsSize} />
+                  </Button>
                                           </>
                                         )}
-                                      </TableCell>
-                                    </TableRow>
-                                  ))}
-                                </TableBody>
-                              </Table>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
                             </TableContainer>
                           ) : (
                             <Typography 
@@ -696,15 +706,15 @@ const StrengthTrainings = () => {
               ))}
             </TableBody>
           </Table>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-            count={trainings.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+          count={trainings.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </TableContainer>
       ) : (
         <>
           {isAddingTraining && (
@@ -899,7 +909,7 @@ const StrengthTrainings = () => {
                                 <TextField
                                   name="exerciseName"
                                   value={editSetFormData.exerciseName}
-                                  onChange={handleSetFormChange}
+                                  onChange={(e) => handleSetFormChange(e, set.setId)}
                                   size="small"
                                   fullWidth
                                   sx={{ '& .MuiInputBase-root': { height: '32px' } }}
@@ -914,7 +924,7 @@ const StrengthTrainings = () => {
                                   name="repetitionsNumber"
                                   type="number"
                                   value={editSetFormData.repetitionsNumber}
-                                  onChange={handleSetFormChange}
+                                  onChange={(e) => handleSetFormChange(e, set.setId)}
                                   size="small"
                                   sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                                 />
@@ -928,7 +938,7 @@ const StrengthTrainings = () => {
                                   name="weight"
                                   type="number"
                                   value={editSetFormData.weight}
-                                  onChange={handleSetFormChange}
+                                  onChange={(e) => handleSetFormChange(e, set.setId)}
                                   size="small"
                                   sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                                 />
@@ -942,7 +952,7 @@ const StrengthTrainings = () => {
                                   name="exhaustionLevel"
                                   type="number"
                                   value={editSetFormData.exhaustionLevel}
-                                  onChange={handleSetFormChange}
+                                  onChange={(e) => handleSetFormChange(e, set.setId)}
                                   size="small"
                                   sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                                 />
