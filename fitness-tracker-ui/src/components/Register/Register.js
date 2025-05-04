@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import styles from './Register.module.css';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import Tooltip from '@mui/material/Tooltip';
+import { useSelector } from 'react-redux';
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -17,6 +18,13 @@ const Register = () => {
   const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/aerobic");
+    }
+  }, [isAuthenticated, navigate]);
 
   const validateForm = (formData) => {
     const errors = {};

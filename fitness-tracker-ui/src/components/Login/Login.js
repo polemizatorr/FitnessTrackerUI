@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Login.module.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { loginUser } from '../../Services/UserService';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess } from '../../actions/authActions';
 import { Toaster, toast } from 'react-hot-toast';
 import Tooltip from '@mui/material/Tooltip';
@@ -13,9 +13,16 @@ import Tooltip from '@mui/material/Tooltip';
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/aerobic");
+    }
+  }, [isAuthenticated, navigate]);
 
   const validateForm = (formData) => {
     const errors = {};
