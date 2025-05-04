@@ -72,7 +72,6 @@ export const deleteAerobicTraining = async (id) => {
 }
 
 export const exportAllAerobicTrainings = async () => {
-
     const token = localStorage.getItem('token');
     const headers = {
         'Authorization': "Bearer " + token
@@ -90,7 +89,6 @@ export const exportAllAerobicTrainings = async () => {
         link.click();
         URL.revokeObjectURL(fileURL);
         return res;
-
     } catch (err) {
         console.log(err);
     }
@@ -164,7 +162,6 @@ export const deleteStrengthTraining = async (id) => {
 }
 
 export const exportAllStrengthTrainings = async () => {
-
     const token = localStorage.getItem('token');
     const headers = {
         'Authorization': "Bearer " + token
@@ -182,7 +179,6 @@ export const exportAllStrengthTrainings = async () => {
         link.click();
         URL.revokeObjectURL(fileURL);
         return res;
-
     } catch (err) {
         console.log(err);
     }
@@ -248,13 +244,7 @@ export const createStrengthTrainingSet = async (trainingId, data) => {
 const getCurrentDate = () => {
     let now = new Date();
     const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-    const customDateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-    return customDateTimeString;
+    return `${year}-${month}-${day}`;
 }

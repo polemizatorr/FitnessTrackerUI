@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Tooltip from '@mui/material/Tooltip';
 import {
   Table,
   TableBody,
@@ -27,6 +26,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../AerobicTrainings/AerobicTrainings.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus, faTable, faList } from '@fortawesome/free-solid-svg-icons';
+import Tooltip from '@mui/material/Tooltip';
 
 const AerobicTrainings = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -209,7 +209,7 @@ const AerobicTrainings = () => {
         calorieBurnt: newTrainingFormData.calorieBurnt
       };
       console.log(formattedData)
-      const response = await createAerobicTraining(formattedData);
+      await createAerobicTraining(formattedData);
       setIsAddingTraining(false);
       fetchData();
     } catch (error) {

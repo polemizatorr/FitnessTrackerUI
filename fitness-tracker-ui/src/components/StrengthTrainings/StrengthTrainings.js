@@ -8,7 +8,6 @@ import {
   TableRow,
   Paper,
   Button,
-  Modal,
   Box,
   TablePagination,
   Accordion,
@@ -27,7 +26,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import styles from '../StrengthTrainings/StrengthTrainings.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus, faTable, faList, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import CreateStrengthTraining from '../CreateStrengthTraining/CreateStrengthTraining';
 import Tooltip from '@mui/material/Tooltip';
 
 const StrengthTrainings = () => {
@@ -38,7 +36,6 @@ const StrengthTrainings = () => {
 
   const [trainings, setTrainings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [viewMode, setViewMode] = useState('table');
@@ -76,12 +73,6 @@ const StrengthTrainings = () => {
     trainingDate: new Date().toISOString().split('T')[0]
   });
 
-  const handleOpenModal = () => setOpen(true);
-  const handleCloseModal = () => {
-    fetchData();
-    setOpen(false);
-  };
-
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -115,7 +106,7 @@ const StrengthTrainings = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
+
     setEditFormErrors(prev => ({
       ...prev,
       [name]: false
@@ -352,7 +343,7 @@ const StrengthTrainings = () => {
 
     setEditFormErrors({});
     try {
-      const response = await createStrengthTraining(newTrainingFormData);
+      await createStrengthTraining(newTrainingFormData);
       setIsAddingTraining(false);
       fetchData();
     } catch (error) {
@@ -370,18 +361,18 @@ const StrengthTrainings = () => {
   };
 
   const handleNumericInput = (event) => {
-    // Allow: backspace, delete, tab, escape, enter, decimal point (for weight)
+
     if ([46, 8, 9, 27, 13, 110, 190].indexOf(event.keyCode) !== -1 ||
-      // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+
       (event.keyCode === 65 && event.ctrlKey === true) ||
       (event.keyCode === 67 && event.ctrlKey === true) ||
       (event.keyCode === 86 && event.ctrlKey === true) ||
       (event.keyCode === 88 && event.ctrlKey === true) ||
-      // Allow: home, end, left, right
+
       (event.keyCode >= 35 && event.keyCode <= 39)) {
       return;
     }
-    // Ensure that it is a number and stop the keypress
+
     if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105)) {
       event.preventDefault();
     }
@@ -1514,18 +1505,6 @@ const StrengthTrainings = () => {
       </div>
     </>
   );
-};
-
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  backgroundColor: 'white',
-  boxShadow: 24,
-  padding: '20px',
-  borderRadius: '8px',
 };
 
 export default StrengthTrainings;
