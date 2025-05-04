@@ -30,23 +30,28 @@ export const getAerobicTraining = async (id) => {
     }
 }
 
-export const createAerobicTraining = async (aerobicTraining) => {
+export const createAerobicTraining = async (data) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer " + token,
+  };
 
-    const token = localStorage.getItem('token');
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token,
-    };
+  const requestData = {
+    ActivityType: data.activityType,
+    ActivityDurationMinutes: parseInt(data.activityDurationMinutes),
+    CalorieBurnt: parseInt(data.calorieBurnt),
+    ActivityDate: data.activityDate
+  };
 
-    try {
-        const res = await axios.post(API_URL + "/AerobicTrainings", aerobicTraining, {
-            headers: headers
-          });
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-}
+  try {
+    const res = await axios.post(API_URL + "/AerobicTrainings", requestData, { headers });
+    return res;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 
 export const editAerobicTraining = async (id, aerobicTraining) => {
     try {
@@ -67,7 +72,6 @@ export const deleteAerobicTraining = async (id) => {
 }
 
 export const exportAllAerobicTrainings = async () => {
-
     const token = localStorage.getItem('token');
     const headers = {
         'Authorization': "Bearer " + token
@@ -85,7 +89,6 @@ export const exportAllAerobicTrainings = async () => {
         link.click();
         URL.revokeObjectURL(fileURL);
         return res;
-
     } catch (err) {
         console.log(err);
     }
@@ -120,20 +123,34 @@ export const getStrengthTraining = async (id) => {
 }
 
 export const createStrengthTraining = async (data) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer " + token,
+  };
 
-    const token = localStorage.getItem('token');
-    const headers = {
+  try {
+    const res = await axios.post(API_URL + "/StrengthTrainings", data, { headers: headers });
+    return res;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const editStrengthTraining = async (id, data) => {
+  try {
+    const response = await axios.put(`${API_URL}/StrengthTrainings/${id}`, data, {
+      headers: {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + token,
-    };
-
-    try {
-        const res = await axios.post(API_URL + "/StrengthTrainings", data, { headers: headers });
-        return res;
-    } catch (err) {
-        console.log(err);
-    }
-}
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error editing strength training:', error);
+    throw error;
+  }
+};
 
 export const deleteStrengthTraining = async (id) => {
     try {
@@ -145,7 +162,6 @@ export const deleteStrengthTraining = async (id) => {
 }
 
 export const exportAllStrengthTrainings = async () => {
-
     const token = localStorage.getItem('token');
     const headers = {
         'Authorization': "Bearer " + token
@@ -163,7 +179,6 @@ export const exportAllStrengthTrainings = async () => {
         link.click();
         URL.revokeObjectURL(fileURL);
         return res;
-
     } catch (err) {
         console.log(err);
     }
@@ -180,7 +195,7 @@ export const createSet = async (strengthTrainingId, setData) => {
     };
 
     try {
-        const res = await axios.post(API_URL + "/Sets/" + strengthTrainingId, setData, {headers: headers});
+        const res = await axios.post(API_URL + "/Sets/" + strengthTrainingId, setData, { headers: headers });
         return res;
     } catch (err) {
         console.log(err);
@@ -196,16 +211,40 @@ export const deleteSet = async (id) => {
     }
 }
 
+export const editStrengthTrainingSet = async (id, data) => {
+  try {
+    const response = await axios.put(`${API_URL}/sets/${id}`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error editing strength training set:', error);
+    throw error;
+  }
+};
+
+export const createStrengthTrainingSet = async (trainingId, data) => {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': "Bearer " + token,
+  };
+
+  try {
+    const response = await axios.post(`${API_URL}/sets/${trainingId}`, data, { headers });
+    return response.data;
+  } catch (error) {
+    console.error('Error creating strength training set:', error);
+    throw error;
+  }
+};
+
 const getCurrentDate = () => {
     let now = new Date();
     const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-    const customDateTimeString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-    return customDateTimeString;
+    return `${year}-${month}-${day}`;
 }
