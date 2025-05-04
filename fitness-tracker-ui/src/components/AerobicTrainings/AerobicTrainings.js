@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
 import {
   Table,
   TableBody,
@@ -52,6 +53,8 @@ const AerobicTrainings = () => {
     calorieBurnt: '',
     activityDate: new Date().toISOString().split('T')[0]
   });
+  const [validationErrors, setValidationErrors] = useState({});
+  const [newValidationErrors, setNewValidationErrors] = useState({});
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -80,6 +83,7 @@ const AerobicTrainings = () => {
 
   const handleCancelClick = () => {
     setEditingId(null);
+    setValidationErrors({});
   };
 
   const handleEditFormChange = (event) => {
@@ -91,6 +95,15 @@ const AerobicTrainings = () => {
   };
 
   const handleSaveClick = async (id) => {
+    const errors = validateTrainingForm(editFormData);
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setValidationErrors({});
+
     try {
       await editAerobicTraining(id, editFormData);
       setEditingId(null);
@@ -152,9 +165,42 @@ const AerobicTrainings = () => {
 
   const handleAddTrainingCancel = () => {
     setIsAddingTraining(false);
+    setNewValidationErrors({});
   };
 
+  const validateTrainingForm = (formData) => {
+    const errors = {};
+  
+    if (!formData.activityType || formData.activityType.trim().length === 0) {
+      errors.activityType = 'Activity type is required';
+    } else if (formData.activityType.length > 50) {
+      errors.activityType = 'Max 50 characters allowed';
+    }
+  
+    if (!formData.activityDate) {
+      errors.activityDate = 'Activity date is required';
+    }
+  
+    if (!formData.activityDurationMinutes || isNaN(formData.activityDurationMinutes) || Number(formData.activityDurationMinutes) <= 0) {
+      errors.activityDurationMinutes = 'Duration must be a number > 0';
+    }
+  
+    if (!formData.calorieBurnt || isNaN(formData.calorieBurnt) || Number(formData.calorieBurnt) <= 0) {
+      errors.calorieBurnt = 'Calories must be a number > 0';
+    }
+  
+    return errors;
+  };
+ 
   const handleAddTrainingSave = async () => {
+
+    const errors = validateTrainingForm(newTrainingFormData);
+    if (Object.keys(errors).length > 0) {
+      setNewValidationErrors(errors);
+      return;
+    }
+
+    setNewValidationErrors({});
     try {
       const formattedData = {
         activityDate: newTrainingFormData.activityDate,
@@ -241,49 +287,86 @@ const AerobicTrainings = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {isAddingTraining && (
+            {isAddingTraining && (
                 <TableRow>
                   <TableCell align="left">New</TableCell>
+                  
                   <TableCell align="left">
-                    <TextField
-                      name="activityType"
-                      value={newTrainingFormData.activityType}
-                      onChange={handleNewTrainingFormChange}
-                      size="small"
-                      fullWidth
-                      placeholder="Enter training name"
-                    />
+                    <Tooltip
+                      title={newValidationErrors.activityType || ''}
+                      open={!!newValidationErrors.activityType}
+                      placement="top"
+                      arrow
+                    >
+                      <TextField
+                        name="activityType"
+                        value={newTrainingFormData.activityType}
+                        onChange={handleNewTrainingFormChange}
+                        size="small"
+                        fullWidth
+                        placeholder="Enter training name"
+                        error={!!newValidationErrors.activityType}
+                      />
+                    </Tooltip>
                   </TableCell>
+
                   <TableCell align="left">
-                    <TextField
-                      name="activityDate"
-                      type="date"
-                      value={newTrainingFormData.activityDate}
-                      onChange={handleNewTrainingFormChange}
-                      size="small"
-                      InputLabelProps={{ shrink: true }}
-                    />
+                    <Tooltip
+                      title={newValidationErrors.activityDate || ''}
+                      open={!!newValidationErrors.activityDate}
+                      placement="top"
+                      arrow
+                    >
+                      <TextField
+                        name="activityDate"
+                        type="date"
+                        value={newTrainingFormData.activityDate}
+                        onChange={handleNewTrainingFormChange}
+                        size="small"
+                        InputLabelProps={{ shrink: true }}
+                        error={!!newValidationErrors.activityDate}
+                      />
+                    </Tooltip>
                   </TableCell>
+
                   <TableCell align="left">
-                    <TextField
-                      name="activityDurationMinutes"
-                      type="number"
-                      value={newTrainingFormData.activityDurationMinutes}
-                      onChange={handleNewTrainingFormChange}
-                      size="small"
-                      sx={{ width: '80px' }}
-                    />
+                    <Tooltip
+                      title={newValidationErrors.activityDurationMinutes || ''}
+                      open={!!newValidationErrors.activityDurationMinutes}
+                      placement="top"
+                      arrow
+                    >
+                      <TextField
+                        name="activityDurationMinutes"
+                        type="number"
+                        value={newTrainingFormData.activityDurationMinutes}
+                        onChange={handleNewTrainingFormChange}
+                        size="small"
+                        sx={{ width: '80px' }}
+                        error={!!newValidationErrors.activityDurationMinutes}
+                      />
+                    </Tooltip>
                   </TableCell>
+
                   <TableCell align="left">
-                    <TextField
-                      name="calorieBurnt"
-                      type="number"
-                      value={newTrainingFormData.calorieBurnt}
-                      onChange={handleNewTrainingFormChange}
-                      size="small"
-                      sx={{ width: '80px' }}
-                    />
+                    <Tooltip
+                      title={newValidationErrors.calorieBurnt || ''}
+                      open={!!newValidationErrors.calorieBurnt}
+                      placement="top"
+                      arrow
+                    >
+                      <TextField
+                        name="calorieBurnt"
+                        type="number"
+                        value={newTrainingFormData.calorieBurnt}
+                        onChange={handleNewTrainingFormChange}
+                        size="small"
+                        sx={{ width: '80px' }}
+                        error={!!newValidationErrors.calorieBurnt}
+                      />
+                    </Tooltip>
                   </TableCell>
+
                   <TableCell align="left">
                     <Button
                       color="primary"
@@ -322,20 +405,52 @@ const AerobicTrainings = () => {
                   <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell align="left" sx={{ fontWeight: 500 }}>
                     {editingId === training.aerobicTrainingId ? (
-                      <TextField
-                        name="activityType"
-                        value={editFormData.activityType}
-                        onChange={handleEditFormChange}
-                        size="small"
-                        fullWidth
-                        sx={{ '& .MuiInputBase-root': { height: '32px' } }}
-                      />
+                      <Tooltip
+                      title={
+                        isAddingTraining
+                          ? newValidationErrors.activityType || ''
+                          : editingId === training.aerobicTrainingId
+                          ? validationErrors.activityType || ''
+                          : ''
+                      }
+                      open={
+                        (isAddingTraining && !!newValidationErrors.activityType) ||
+                        (editingId === training.aerobicTrainingId && !!validationErrors.activityType)
+                      }
+                      placement="top"
+                      arrow
+                    >
+                        <TextField
+                          name="activityType"
+                          value={editFormData.activityType}
+                          onChange={handleEditFormChange}
+                          size="small"
+                          fullWidth
+                          error={!!validationErrors.activityType}
+                          sx={{ '& .MuiInputBase-root': { height: '32px' } }}
+                        />
+                      </Tooltip>
                     ) : (
                       training.activityType
                     )}
                   </TableCell>
                   <TableCell align="left">
                     {editingId === training.aerobicTrainingId ? (
+                      <Tooltip
+                      title={
+                        isAddingTraining
+                          ? newValidationErrors.activityDate || ''
+                          : editingId === training.aerobicTrainingId
+                          ? validationErrors.activityDate || ''
+                          : ''
+                      }
+                      open={
+                        (isAddingTraining && !!newValidationErrors.activityDate) ||
+                        (editingId === training.aerobicTrainingId && !!validationErrors.activityDate)
+                      }
+                      placement="top"
+                      arrow
+                    >
                       <TextField
                         name="activityDate"
                         type="date"
@@ -344,35 +459,71 @@ const AerobicTrainings = () => {
                         size="small"
                         InputLabelProps={{ shrink: true }}
                         sx={{ '& .MuiInputBase-root': { height: '32px' } }}
+                        error={!!validationErrors.activityDate}
                       />
+                      </Tooltip>
                     ) : (
                       new Date(training.activityDate).toLocaleDateString()
                     )}
                   </TableCell>
                   <TableCell align="left">
                     {editingId === training.aerobicTrainingId ? (
+                      <Tooltip
+                      title={
+                        isAddingTraining
+                          ? newValidationErrors.activityDurationMinutes || ''
+                          : editingId === training.aerobicTrainingId
+                          ? validationErrors.activityDurationMinutes || ''
+                          : ''
+                      }
+                      open={
+                        (isAddingTraining && !!newValidationErrors.activityDurationMinutes) ||
+                        (editingId === training.aerobicTrainingId && !!validationErrors.activityDurationMinutes)
+                      }
+                      placement="top"
+                      arrow
+                    >
                       <TextField
                         name="activityDurationMinutes"
                         type="number"
                         value={editFormData.activityDurationMinutes}
                         onChange={handleEditFormChange}
                         size="small"
+                        error={!!validationErrors.activityDurationMinutes}
                         sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                       />
+                      </Tooltip>
                     ) : (
                       training.activityDurationMinutes
                     )}
                   </TableCell>
                   <TableCell align="left">
                     {editingId === training.aerobicTrainingId ? (
+                      <Tooltip
+                      title={
+                        isAddingTraining
+                          ? newValidationErrors.calorieBurnt || ''
+                          : editingId === training.aerobicTrainingId
+                          ? validationErrors.calorieBurnt || ''
+                          : ''
+                      }
+                      open={
+                        (isAddingTraining && !!newValidationErrors.calorieBurnt) ||
+                        (editingId === training.aerobicTrainingId && !!validationErrors.calorieBurnt)
+                      }
+                      placement="top"
+                      arrow
+                    >
                       <TextField
                         name="calorieBurnt"
                         type="number"
                         value={editFormData.calorieBurnt}
                         onChange={handleEditFormChange}
                         size="small"
+                        error={!!validationErrors.calorieBurnt}
                         sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
                       />
+                      </Tooltip>
                     ) : (
                       training.calorieBurnt
                     )}
@@ -439,6 +590,8 @@ const AerobicTrainings = () => {
         <>
           {isAddingTraining && (
             <Accordion
+              expanded={false}
+              onChange={() => {}} // prevent collapsing when creating new training
               sx={{
                 borderRadius: '12px',
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
@@ -473,40 +626,52 @@ const AerobicTrainings = () => {
                   New Training
                 </Typography>
                 <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <TextField
-                    name="activityType"
-                    value={newTrainingFormData.activityType}
-                    onChange={handleNewTrainingFormChange}
-                    size="small"
-                    placeholder="Enter activity type"
-                    sx={{ width: '200px' }}
-                  />
-                  <TextField
-                    name="activityDate"
-                    type="date"
-                    value={newTrainingFormData.activityDate}
-                    onChange={handleNewTrainingFormChange}
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                  />
-                  <TextField
-                    name="activityDurationMinutes"
-                    value={newTrainingFormData.activityDurationMinutes}
-                    onChange={handleNewTrainingFormChange}
-                    size="small"
-                    type="number"
-                    placeholder="Duration (min)"
-                    sx={{ width: '120px' }}
-                  />
-                  <TextField
-                    name="calorieBurnt"
-                    value={newTrainingFormData.calorieBurnt}
-                    onChange={handleNewTrainingFormChange}
-                    size="small"
-                    type="number"
-                    placeholder="Calories"
-                    sx={{ width: '120px' }}
-                  />
+                  <Tooltip title={newValidationErrors.activityType || ''} open={!!newValidationErrors.activityType} placement="top" arrow>
+                    <TextField
+                      name="activityType"
+                      value={newTrainingFormData.activityType}
+                      onChange={handleNewTrainingFormChange}
+                      size="small"
+                      placeholder="Enter activity type"
+                      error={!!newValidationErrors.activityType}
+                      sx={{ width: '200px' }}
+                    />
+                  </Tooltip>
+                  <Tooltip title={newValidationErrors.activityDate || ''} open={!!newValidationErrors.activityDate} placement="top" arrow>
+                    <TextField
+                      name="activityDate"
+                      type="date"
+                      value={newTrainingFormData.activityDate}
+                      onChange={handleNewTrainingFormChange}
+                      size="small"
+                      error={!!newValidationErrors.activityDate}
+                      InputLabelProps={{ shrink: true }}
+                    />
+                  </Tooltip>
+                  <Tooltip title={newValidationErrors.activityDurationMinutes || ''} open={!!newValidationErrors.activityDurationMinutes} placement="top" arrow>
+                    <TextField
+                      name="activityDurationMinutes"
+                      value={newTrainingFormData.activityDurationMinutes}
+                      onChange={handleNewTrainingFormChange}
+                      size="small"
+                      type="number"
+                      placeholder="Duration (min)"
+                      error={!!newValidationErrors.activityDurationMinutes}
+                      sx={{ width: '120px' }}
+                    />
+                  </Tooltip>
+                  <Tooltip title={newValidationErrors.calorieBurnt || ''} open={!!newValidationErrors.calorieBurnt} placement="top" arrow>
+                    <TextField
+                      name="calorieBurnt"
+                      value={newTrainingFormData.calorieBurnt}
+                      onChange={handleNewTrainingFormChange}
+                      size="small"
+                      type="number"
+                      placeholder="Calories"
+                      error={!!newValidationErrors.calorieBurnt}
+                      sx={{ width: '120px' }}
+                    />
+                  </Tooltip>
                   <Button
                     color="primary"
                     onClick={handleAddTrainingSave}
@@ -566,13 +731,16 @@ const AerobicTrainings = () => {
                   color: '#1976d2'
                 }}>
                   #{page * rowsPerPage + index + 1} - {editingId === training.aerobicTrainingId ? (
-                    <TextField
-                      name="activityType"
-                      value={editFormData.activityType}
-                      onChange={handleEditFormChange}
-                      size="small"
-                      sx={{ width: '200px' }}
-                    />
+                    <Tooltip title={validationErrors.activityType || ''} open={!!validationErrors.activityType} placement="top" arrow>
+                      <TextField
+                        name="activityType"
+                        value={editFormData.activityType}
+                        onChange={handleEditFormChange}
+                        size="small"
+                        error={!!validationErrors.activityType}
+                        sx={{ width: '200px' }}
+                      />
+                    </Tooltip>
                   ) : (
                     training.activityType
                   )}
@@ -582,15 +750,18 @@ const AerobicTrainings = () => {
                   fontSize: '0.9rem'
                 }}>
                   {editingId === training.aerobicTrainingId ? (
-                    <TextField
-                      name="activityDate"
-                      type="date"
-                      value={editFormData.activityDate}
-                      onChange={handleEditFormChange}
-                      size="small"
-                      InputLabelProps={{ shrink: true }}
-                      sx={{ width: '150px' }}
-                    />
+                    <Tooltip title={validationErrors.activityDate || ''} open={!!validationErrors.activityDate} placement="top" arrow>
+                      <TextField
+                        name="activityDate"
+                        type="date"
+                        value={editFormData.activityDate}
+                        onChange={handleEditFormChange}
+                        size="small"
+                        InputLabelProps={{ shrink: true }}
+                        error={!!validationErrors.activityDate}
+                        sx={{ width: '150px' }}
+                      />
+                    </Tooltip>
                   ) : (
                     new Date(training.activityDate).toLocaleDateString('en-US', {
                       year: 'numeric',
@@ -610,14 +781,17 @@ const AerobicTrainings = () => {
                   <Box>
                     <Typography variant="subtitle2" color="text.secondary">Duration</Typography>
                     {editingId === training.aerobicTrainingId ? (
-                      <TextField
-                        name="activityDurationMinutes"
-                        type="number"
-                        value={editFormData.activityDurationMinutes}
-                        onChange={handleEditFormChange}
-                        size="small"
-                        fullWidth
-                      />
+                      <Tooltip title={validationErrors.activityDurationMinutes || ''} open={!!validationErrors.activityDurationMinutes} placement="top" arrow>
+                        <TextField
+                          name="activityDurationMinutes"
+                          type="number"
+                          value={editFormData.activityDurationMinutes}
+                          onChange={handleEditFormChange}
+                          size="small"
+                          error={!!validationErrors.activityDurationMinutes}
+                          fullWidth
+                        />
+                      </Tooltip>
                     ) : (
                       <Typography variant="body1">{training.activityDurationMinutes} minutes</Typography>
                     )}
@@ -625,14 +799,17 @@ const AerobicTrainings = () => {
                   <Box>
                     <Typography variant="subtitle2" color="text.secondary">Calories</Typography>
                     {editingId === training.aerobicTrainingId ? (
-                      <TextField
-                        name="calorieBurnt"
-                        type="number"
-                        value={editFormData.calorieBurnt}
-                        onChange={handleEditFormChange}
-                        size="small"
-                        fullWidth
-                      />
+                      <Tooltip title={validationErrors.calorieBurnt || ''} open={!!validationErrors.calorieBurnt} placement="top" arrow>
+                        <TextField
+                          name="calorieBurnt"
+                          type="number"
+                          value={editFormData.calorieBurnt}
+                          onChange={handleEditFormChange}
+                          size="small"
+                          fullWidth
+                          error={!!validationErrors.calorieBurnt}
+                        />
+                      </Tooltip>
                     ) : (
                       <Typography variant="body1">{training.calorieBurnt}</Typography>
                     )}

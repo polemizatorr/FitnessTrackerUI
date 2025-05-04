@@ -46,6 +46,10 @@ const StrengthTrainings = () => {
     trainingName: '',
     trainingDate: ''
   });
+  const [editFormErrors, setEditFormErrors] = useState({
+    trainingName: false,
+    trainingDate: false
+  });
   const [editingSetId, setEditingSetId] = useState(null);
   const [editSetFormData, setEditSetFormData] = useState({
     setId: '',
@@ -87,9 +91,14 @@ const StrengthTrainings = () => {
 
   const handleEditClick = (training) => {
     setEditingId(training.strenghtTrainingId);
+    const date = new Date(training.trainingDate);
+    const offset = date.getTimezoneOffset();
+    const adjustedDate = new Date(date.getTime() - (offset * 60 * 1000));
+    const formattedDate = adjustedDate.toISOString().split('T')[0];
+    
     setEditFormData({
       trainingName: training.trainingName,
-      trainingDate: training.trainingDate
+      trainingDate: formattedDate
     });
   };
 
@@ -98,11 +107,15 @@ const StrengthTrainings = () => {
   };
 
   const handleEditFormChange = (event) => {
-    console.log(event)
     const { name, value } = event.target;
     setEditFormData(prev => ({
       ...prev,
       [name]: value
+    }));
+    // Clear error when user starts typing
+    setEditFormErrors(prev => ({
+      ...prev,
+      [name]: false
     }));
   };
 
@@ -758,6 +771,7 @@ const StrengthTrainings = () => {
                     value={newTrainingFormData.trainingName}
                     onChange={handleNewTrainingFormChange}
                     size="small"
+                    fullWidth
                     placeholder="Enter training name"
                     sx={{ width: '200px' }}
                   />
