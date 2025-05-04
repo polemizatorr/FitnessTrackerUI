@@ -28,6 +28,7 @@ import styles from '../StrengthTrainings/StrengthTrainings.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faPlus, faTable, faList, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import CreateStrengthTraining from '../CreateStrengthTraining/CreateStrengthTraining';
+import Tooltip from '@mui/material/Tooltip';
 
 const StrengthTrainings = () => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
@@ -58,6 +59,7 @@ const StrengthTrainings = () => {
     weight: '',
     exhaustionLevel: ''
   });
+  const [editSetValidationErrors, setEditSetValidationErrors] = useState({});
   const [addingSetId, setAddingSetId] = useState(null);
   const [newSetFormData, setNewSetFormData] = useState({
     setId: '',
@@ -66,6 +68,7 @@ const StrengthTrainings = () => {
     weight: '',
     exhaustionLevel: ''
   });
+  const [newSetValidationErrors, setNewSetValidationErrors] = useState({});
   const [expandedRow, setExpandedRow] = useState(null);
   const [isAddingTraining, setIsAddingTraining] = useState(false);
   const [newTrainingFormData, setNewTrainingFormData] = useState({
@@ -119,7 +122,30 @@ const StrengthTrainings = () => {
     }));
   };
 
+  const validateTrainingForm = (formData) => {
+    const errors = {};
+  
+    if (!formData.trainingName || formData.trainingName.trim().length === 0) {
+      errors.trainingName = 'Training name is required';
+    } else if (formData.trainingName.length > 50) {
+      errors.trainingName = 'Max 50 characters allowed';
+    }
+  
+    if (!formData.trainingDate) {
+      errors.trainingDate = 'Training date is required';
+    }
+  
+    return errors;
+  };
+
   const handleSaveClick = async (id) => {
+    const errors = validateTrainingForm(editFormData);
+    if (Object.keys(errors).length > 0) {
+      setEditFormErrors(errors);
+      return;
+    }
+
+    setEditFormErrors({});
     try {
       await editStrengthTraining(id, editFormData);
       setEditingId(null);
@@ -142,6 +168,43 @@ const StrengthTrainings = () => {
 
   const handleSetCancelClick = () => {
     setEditingSetId(null);
+    setEditSetValidationErrors({});
+  };
+
+  const validateSetForm = (formData) => {
+    const errors = {};
+  
+    if (!formData.exerciseName || formData.exerciseName.trim().length === 0) {
+      errors.exerciseName = 'Exercise name is required';
+    } else if (formData.exerciseName.length > 50) {
+      errors.exerciseName = 'Max 50 characters allowed';
+    }
+  
+    if (!formData.repetitionsNumber || formData.repetitionsNumber.toString().trim() === '') {
+      errors.repetitionsNumber = 'Repetitions is required';
+    } else if (!/^\d+$/.test(formData.repetitionsNumber.toString())) {
+      errors.repetitionsNumber = 'Invalid value';
+    } else if (Number(formData.repetitionsNumber) <= 0) {
+      errors.repetitionsNumber = 'Repetitions must be a number > 0';
+    }
+  
+    if (!formData.weight || formData.weight.toString().trim() === '') {
+      errors.weight = 'Weight is required';
+    } else if (!/^\d+$/.test(formData.weight.toString())) {
+      errors.weight = 'Invalid value';
+    } else if (Number(formData.weight) <= 0) {
+      errors.weight = 'Weight must be a number > 0';
+    }
+  
+    if (!formData.exhaustionLevel || formData.exhaustionLevel.toString().trim() === '') {
+      errors.exhaustionLevel = 'Exhaustion level is required';
+    } else if (!/^\d+$/.test(formData.exhaustionLevel.toString())) {
+      errors.exhaustionLevel = 'Invalid value';
+    } else if (Number(formData.exhaustionLevel) < 1 || Number(formData.exhaustionLevel) > 10) {
+      errors.exhaustionLevel = 'Exhaustion level must be between 1 and 10';
+    }
+  
+    return errors;
   };
 
   const handleSetFormChange = (event, setId) => {
@@ -151,11 +214,22 @@ const StrengthTrainings = () => {
       [name]: value,
       setId: setId
     }));
+    // Clear error when user starts typing
+    setEditSetValidationErrors(prev => ({
+      ...prev,
+      [name]: false
+    }));
   };
 
   const handleSetSaveClick = async (setId) => {
+    const errors = validateSetForm(editSetFormData);
+    if (Object.keys(errors).length > 0) {
+      setEditSetValidationErrors(errors);
+      return;
+    }
+
+    setEditSetValidationErrors({});
     try {
-      console.log('handleSetSaveClick', editSetFormData, setId)
       const dataToSend = {
         ...editSetFormData,
         setId: setId
@@ -184,13 +258,26 @@ const StrengthTrainings = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
+    setNewSetValidationErrors(prev => ({
+      ...prev,
+      [name]: false
+    }));
   };
 
   const handleAddSetCancel = () => {
     setAddingSetId(null);
+    setNewSetValidationErrors({});
   };
 
   const handleAddSetSave = async (trainingId) => {
+    const errors = validateSetForm(newSetFormData);
+    if (Object.keys(errors).length > 0) {
+      setNewSetValidationErrors(errors);
+      return;
+    }
+
+    setNewSetValidationErrors({});
     try {
       await createStrengthTrainingSet(trainingId, newSetFormData);
       setAddingSetId(null);
@@ -257,6 +344,13 @@ const StrengthTrainings = () => {
   };
 
   const handleAddTrainingSave = async () => {
+    const errors = validateTrainingForm(newTrainingFormData);
+    if (Object.keys(errors).length > 0) {
+      setEditFormErrors(errors);
+      return;
+    }
+
+    setEditFormErrors({});
     try {
       const response = await createStrengthTraining(newTrainingFormData);
       setIsAddingTraining(false);
@@ -272,6 +366,24 @@ const StrengthTrainings = () => {
       fetchData();
     } catch (error) {
       console.error("Error deleting set:", error);
+    }
+  };
+
+  const handleNumericInput = (event) => {
+    // Allow: backspace, delete, tab, escape, enter, decimal point (for weight)
+    if ([46, 8, 9, 27, 13, 110, 190].indexOf(event.keyCode) !== -1 ||
+      // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+      (event.keyCode === 65 && event.ctrlKey === true) ||
+      (event.keyCode === 67 && event.ctrlKey === true) ||
+      (event.keyCode === 86 && event.ctrlKey === true) ||
+      (event.keyCode === 88 && event.ctrlKey === true) ||
+      // Allow: home, end, left, right
+      (event.keyCode >= 35 && event.keyCode <= 39)) {
+      return;
+    }
+    // Ensure that it is a number and stop the keypress
+    if ((event.shiftKey || (event.keyCode < 48 || event.keyCode > 57)) && (event.keyCode < 96 || event.keyCode > 105)) {
+      event.preventDefault();
     }
   };
 
@@ -347,14 +459,22 @@ const StrengthTrainings = () => {
                 <TableRow>
                   <TableCell align="left">New</TableCell>
                   <TableCell align="left">
-                    <TextField
-                      name="trainingName"
-                      value={newTrainingFormData.trainingName}
-                      onChange={handleNewTrainingFormChange}
-                      size="small"
-                      fullWidth
-                      placeholder="Enter training name"
-                    />
+                    <Tooltip
+                      title={editFormErrors.trainingName || ''}
+                      open={!!editFormErrors.trainingName}
+                      placement="top"
+                      arrow
+                    >
+                      <TextField
+                        name="trainingName"
+                        value={newTrainingFormData.trainingName}
+                        onChange={handleNewTrainingFormChange}
+                        size="small"
+                        fullWidth
+                        placeholder="Enter training name"
+                        error={!!editFormErrors.trainingName}
+                      />
+                    </Tooltip>
                   </TableCell>
                   <TableCell align="left">
                     <TextField
@@ -392,12 +512,21 @@ const StrengthTrainings = () => {
                     <TableCell align="left">{page * rowsPerPage + index + 1}</TableCell>
                     <TableCell align="left">
                       {editingId === training.strenghtTrainingId ? (
-                        <TextField
-                          name="trainingName"
-                          value={editFormData.trainingName}
-                          onChange={handleEditFormChange}
-                          size="small"
-                        />
+                        <Tooltip
+                          title={editFormErrors.trainingName || ''}
+                          open={!!editFormErrors.trainingName}
+                          placement="top"
+                          arrow
+                        >
+                          <TextField
+                            name="trainingName"
+                            value={editFormData.trainingName}
+                            onChange={handleEditFormChange}
+                            size="small"
+                            error={!!editFormErrors.trainingName}
+                            sx={{ '& .MuiInputBase-root': { height: '32px' } }}
+                          />
+                        </Tooltip>
                       ) : (
                         training.trainingName
                       )}
@@ -511,56 +640,111 @@ const StrengthTrainings = () => {
                                     >
                                       <TableCell align="left" sx={{ fontWeight: 500, padding: '8px 16px' }}>
                                         {editingSetId === set.setId ? (
-                                          <TextField
-                                            name="exerciseName"
-                                            value={editSetFormData.exerciseName}
-                                            onChange={(e) => handleSetFormChange(e, set.setId)}
-                                            size="small"
-                                            fullWidth
-                                            sx={{ '& .MuiInputBase-root': { height: '32px' } }}
-                                          />
+                                          <Tooltip
+                                            title={editSetValidationErrors.exerciseName || ''}
+                                            open={!!editSetValidationErrors.exerciseName}
+                                            placement="top"
+                                            arrow
+                                          >
+                                            <TextField
+                                              name="exerciseName"
+                                              value={editSetFormData.exerciseName}
+                                              onChange={(e) => handleSetFormChange(e, set.setId)}
+                                              size="small"
+                                              fullWidth
+                                              error={!!editSetValidationErrors.exerciseName}
+                                              sx={{ '& .MuiInputBase-root': { height: '32px' } }}
+                                              onKeyDown={handleNumericInput}
+                                            />
+                                          </Tooltip>
                                         ) : (
                                           set.exerciseName
                                         )}
                                       </TableCell>
                                       <TableCell align="left" sx={{ padding: '8px 16px' }}>
                                         {editingSetId === set.setId ? (
-                                          <TextField
-                                            name="repetitionsNumber"
-                                            type="number"
-                                            value={editSetFormData.repetitionsNumber}
-                                            onChange={(e) => handleSetFormChange(e, set.setId)}
-                                            size="small"
-                                            sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
-                                          />
+                                          <Tooltip
+                                            title={editSetValidationErrors.repetitionsNumber || ''}
+                                            open={!!editSetValidationErrors.repetitionsNumber}
+                                            placement="top"
+                                            arrow
+                                          >
+                                            <TextField
+                                              name="repetitionsNumber"
+                                              type="number"
+                                              value={editSetFormData.repetitionsNumber}
+                                              onChange={(e) => handleSetFormChange(e, set.setId)}
+                                              size="small"
+                                              error={!!editSetValidationErrors.repetitionsNumber}
+                                              sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
+                                              inputProps={{ 
+                                                min: 1,
+                                                step: 1,
+                                                inputMode: 'numeric',
+                                                pattern: '[0-9]*'
+                                              }}
+                                              onKeyDown={handleNumericInput}
+                                            />
+                                          </Tooltip>
                                         ) : (
                                           set.repetitionsNumber
                                         )}
                                       </TableCell>
                                       <TableCell align="left" sx={{ padding: '8px 16px' }}>
                                         {editingSetId === set.setId ? (
-                                          <TextField
-                                            name="weight"
-                                            type="number"
-                                            value={editSetFormData.weight}
-                                            onChange={(e) => handleSetFormChange(e, set.setId)}
-                                            size="small"
-                                            sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
-                                          />
+                                          <Tooltip
+                                            title={editSetValidationErrors.weight || ''}
+                                            open={!!editSetValidationErrors.weight}
+                                            placement="top"
+                                            arrow
+                                          >
+                                            <TextField
+                                              name="weight"
+                                              type="number"
+                                              value={editSetFormData.weight}
+                                              onChange={(e) => handleSetFormChange(e, set.setId)}
+                                              size="small"
+                                              error={!!editSetValidationErrors.weight}
+                                              sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
+                                              inputProps={{ 
+                                                min: 1,
+                                                step: 1,
+                                                inputMode: 'numeric',
+                                                pattern: '[0-9]*'
+                                              }}
+                                              onKeyDown={handleNumericInput}
+                                            />
+                                          </Tooltip>
                                         ) : (
                                           set.weight
                                         )}
                                       </TableCell>
                                       <TableCell align="left" sx={{ padding: '8px 16px' }}>
                                         {editingSetId === set.setId ? (
-                                          <TextField
-                                            name="exhaustionLevel"
-                                            type="number"
-                                            value={editSetFormData.exhaustionLevel}
-                                            onChange={(e) => handleSetFormChange(e, set.setId)}
-                                            size="small"
-                                            sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
-                                          />
+                                          <Tooltip
+                                            title={editSetValidationErrors.exhaustionLevel || ''}
+                                            open={!!editSetValidationErrors.exhaustionLevel}
+                                            placement="top"
+                                            arrow
+                                          >
+                                            <TextField
+                                              name="exhaustionLevel"
+                                              type="number"
+                                              value={editSetFormData.exhaustionLevel}
+                                              onChange={(e) => handleSetFormChange(e, set.setId)}
+                                              size="small"
+                                              error={!!editSetValidationErrors.exhaustionLevel}
+                                              sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
+                                              inputProps={{ 
+                                                min: 1,
+                                                max: 10,
+                                                step: 1,
+                                                inputMode: 'numeric',
+                                                pattern: '[0-9]*'
+                                              }}
+                                              onKeyDown={handleNumericInput}
+                                            />
+                                          </Tooltip>
                                         ) : (
                                           <Box 
                                             sx={{ 
@@ -645,42 +829,72 @@ const StrengthTrainings = () => {
                             {addingSetId === training.strenghtTrainingId ? (
                               <Paper sx={{ padding: '1rem', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
                                 <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                  <TextField
-                                    name="exerciseName"
-                                    label="Exercise"
-                                    value={newSetFormData.exerciseName}
-                                    onChange={handleNewSetFormChange}
-                                    size="small"
-                                    sx={{ flex: 2 }}
-                                  />
-                                  <TextField
-                                    name="repetitionsNumber"
-                                    label="Reps"
-                                    type="number"
-                                    value={newSetFormData.repetitionsNumber}
-                                    onChange={handleNewSetFormChange}
-                                    size="small"
-                                    sx={{ width: '100px' }}
-                                  />
-                                  <TextField
-                                    name="weight"
-                                    label="Weight (kg)"
-                                    type="number"
-                                    value={newSetFormData.weight}
-                                    onChange={handleNewSetFormChange}
-                                    size="small"
-                                    sx={{ width: '120px' }}
-                                  />
-                                  <TextField
-                                    name="exhaustionLevel"
-                                    label="Exhaustion"
-                                    type="number"
-                                    value={newSetFormData.exhaustionLevel}
-                                    onChange={handleNewSetFormChange}
-                                    size="small"
-                                    inputProps={{ min: 1, max: 10 }}
-                                    sx={{ width: '120px' }}
-                                  />
+                                  <Tooltip title={newSetValidationErrors.exerciseName || ''} open={!!newSetValidationErrors.exerciseName} placement="top" arrow>
+                                    <TextField
+                                      name="exerciseName"
+                                      label="Exercise"
+                                      value={newSetFormData.exerciseName}
+                                      onChange={handleNewSetFormChange}
+                                      size="small"
+                                      error={!!newSetValidationErrors.exerciseName}
+                                      sx={{ flex: 2 }}
+                                    />
+                                  </Tooltip>
+                                  <Tooltip title={newSetValidationErrors.repetitionsNumber || ''} open={!!newSetValidationErrors.repetitionsNumber} placement="top" arrow>
+                                    <TextField
+                                      name="repetitionsNumber"
+                                      label="Reps"
+                                      type="number"
+                                      value={newSetFormData.repetitionsNumber}
+                                      onChange={handleNewSetFormChange}
+                                      size="small"
+                                      error={!!newSetValidationErrors.repetitionsNumber}
+                                      sx={{ width: '100px' }}
+                                      inputProps={{ 
+                                        min: 1,
+                                        step: 1,
+                                        inputMode: 'numeric',
+                                        pattern: '[0-9]*'
+                                      }}
+                                    />
+                                  </Tooltip>
+                                  <Tooltip title={newSetValidationErrors.weight || ''} open={!!newSetValidationErrors.weight} placement="top" arrow>
+                                    <TextField
+                                      name="weight"
+                                      label="Weight (kg)"
+                                      type="number"
+                                      value={newSetFormData.weight}
+                                      onChange={handleNewSetFormChange}
+                                      size="small"
+                                      error={!!newSetValidationErrors.weight}
+                                      sx={{ width: '120px' }}
+                                      inputProps={{ 
+                                        min: 1,
+                                        step: 1,
+                                        inputMode: 'numeric',
+                                        pattern: '[0-9]*'
+                                      }}
+                                    />
+                                  </Tooltip>
+                                  <Tooltip title={newSetValidationErrors.exhaustionLevel || ''} open={!!newSetValidationErrors.exhaustionLevel} placement="top" arrow>
+                                    <TextField
+                                      name="exhaustionLevel"
+                                      label="Exhaustion"
+                                      type="number"
+                                      value={newSetFormData.exhaustionLevel}
+                                      onChange={handleNewSetFormChange}
+                                      size="small"
+                                      error={!!newSetValidationErrors.exhaustionLevel}
+                                      inputProps={{ 
+                                        min: 1,
+                                        max: 10,
+                                        step: 1,
+                                        inputMode: 'numeric',
+                                        pattern: '[0-9]*'
+                                      }}
+                                      sx={{ width: '120px' }}
+                                    />
+                                  </Tooltip>
                                   <Button
                                     color="primary"
                                     onClick={() => handleAddSetSave(training.strenghtTrainingId)}
@@ -766,15 +980,22 @@ const StrengthTrainings = () => {
                   New Training
                 </Typography>
                 <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  <TextField
-                    name="trainingName"
-                    value={newTrainingFormData.trainingName}
-                    onChange={handleNewTrainingFormChange}
-                    size="small"
-                    fullWidth
-                    placeholder="Enter training name"
-                    sx={{ width: '200px' }}
-                  />
+                  <Tooltip
+                    title={editFormErrors.trainingName || ''}
+                    open={!!editFormErrors.trainingName}
+                    placement="top"
+                    arrow
+                  >
+                    <TextField
+                      name="trainingName"
+                      value={newTrainingFormData.trainingName}
+                      onChange={handleNewTrainingFormChange}
+                      size="small"
+                      fullWidth
+                      placeholder="Enter training name"
+                      error={!!editFormErrors.trainingName}
+                    />
+                  </Tooltip>
                   <TextField
                     name="trainingDate"
                     type="date"
@@ -843,13 +1064,16 @@ const StrengthTrainings = () => {
                   color: '#1976d2'
                 }}>
                   #{page * rowsPerPage + index + 1} - {editingId === training.strenghtTrainingId ? (
-                    <TextField
-                      name="trainingName"
-                      value={editFormData.trainingName}
-                      onChange={handleEditFormChange}
-                      size="small"
-                      sx={{ width: '200px' }}
-                    />
+                    <Tooltip title={editFormErrors.trainingName || ''} open={!!editFormErrors.trainingName} placement="top" arrow>
+                      <TextField
+                        name="trainingName"
+                        value={editFormData.trainingName}
+                        onChange={handleEditFormChange}
+                        size="small"
+                        error={!!editFormErrors.trainingName}
+                        sx={{ width: '200px' }}
+                      />
+                    </Tooltip>
                   ) : (
                     training.trainingName
                   )}
@@ -920,56 +1144,111 @@ const StrengthTrainings = () => {
                           >
                             <TableCell align="left" sx={{ fontWeight: 500, padding: '8px 16px' }}>
                               {editingSetId === set.setId ? (
-                                <TextField
-                                  name="exerciseName"
-                                  value={editSetFormData.exerciseName}
-                                  onChange={(e) => handleSetFormChange(e, set.setId)}
-                                  size="small"
-                                  fullWidth
-                                  sx={{ '& .MuiInputBase-root': { height: '32px' } }}
-                                />
+                                <Tooltip
+                                  title={editSetValidationErrors.exerciseName || ''}
+                                  open={!!editSetValidationErrors.exerciseName}
+                                  placement="top"
+                                  arrow
+                                >
+                                  <TextField
+                                    name="exerciseName"
+                                    value={editSetFormData.exerciseName}
+                                    onChange={(e) => handleSetFormChange(e, set.setId)}
+                                    size="small"
+                                    fullWidth
+                                    error={!!editSetValidationErrors.exerciseName}
+                                    sx={{ '& .MuiInputBase-root': { height: '32px' } }}
+                                    onKeyDown={handleNumericInput}
+                                  />
+                                </Tooltip>
                               ) : (
                                 set.exerciseName
                               )}
                             </TableCell>
                             <TableCell align="left" sx={{ padding: '8px 16px' }}>
                               {editingSetId === set.setId ? (
-                                <TextField
-                                  name="repetitionsNumber"
-                                  type="number"
-                                  value={editSetFormData.repetitionsNumber}
-                                  onChange={(e) => handleSetFormChange(e, set.setId)}
-                                  size="small"
-                                  sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
-                                />
+                                <Tooltip
+                                  title={editSetValidationErrors.repetitionsNumber || ''}
+                                  open={!!editSetValidationErrors.repetitionsNumber}
+                                  placement="top"
+                                  arrow
+                                >
+                                  <TextField
+                                    name="repetitionsNumber"
+                                    type="number"
+                                    value={editSetFormData.repetitionsNumber}
+                                    onChange={(e) => handleSetFormChange(e, set.setId)}
+                                    size="small"
+                                    error={!!editSetValidationErrors.repetitionsNumber}
+                                    sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
+                                    inputProps={{ 
+                                      min: 1,
+                                      step: 1,
+                                      inputMode: 'numeric',
+                                      pattern: '[0-9]*'
+                                    }}
+                                    onKeyDown={handleNumericInput}
+                                  />
+                                </Tooltip>
                               ) : (
                                 set.repetitionsNumber
                               )}
                             </TableCell>
                             <TableCell align="left" sx={{ padding: '8px 16px' }}>
                               {editingSetId === set.setId ? (
-                                <TextField
-                                  name="weight"
-                                  type="number"
-                                  value={editSetFormData.weight}
-                                  onChange={(e) => handleSetFormChange(e, set.setId)}
-                                  size="small"
-                                  sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
-                                />
+                                <Tooltip
+                                  title={editSetValidationErrors.weight || ''}
+                                  open={!!editSetValidationErrors.weight}
+                                  placement="top"
+                                  arrow
+                                >
+                                  <TextField
+                                    name="weight"
+                                    type="number"
+                                    value={editSetFormData.weight}
+                                    onChange={(e) => handleSetFormChange(e, set.setId)}
+                                    size="small"
+                                    error={!!editSetValidationErrors.weight}
+                                    sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
+                                    inputProps={{ 
+                                      min: 1,
+                                      step: 1,
+                                      inputMode: 'numeric',
+                                      pattern: '[0-9]*'
+                                    }}
+                                    onKeyDown={handleNumericInput}
+                                  />
+                                </Tooltip>
                               ) : (
                                 set.weight
                               )}
                             </TableCell>
                             <TableCell align="left" sx={{ padding: '8px 16px' }}>
                               {editingSetId === set.setId ? (
-                                <TextField
-                                  name="exhaustionLevel"
-                                  type="number"
-                                  value={editSetFormData.exhaustionLevel}
-                                  onChange={(e) => handleSetFormChange(e, set.setId)}
-                                  size="small"
-                                  sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
-                                />
+                                <Tooltip
+                                  title={editSetValidationErrors.exhaustionLevel || ''}
+                                  open={!!editSetValidationErrors.exhaustionLevel}
+                                  placement="top"
+                                  arrow
+                                >
+                                  <TextField
+                                    name="exhaustionLevel"
+                                    type="number"
+                                    value={editSetFormData.exhaustionLevel}
+                                    onChange={(e) => handleSetFormChange(e, set.setId)}
+                                    size="small"
+                                    error={!!editSetValidationErrors.exhaustionLevel}
+                                    sx={{ width: '80px', '& .MuiInputBase-root': { height: '32px' } }}
+                                    inputProps={{ 
+                                      min: 1,
+                                      max: 10,
+                                      step: 1,
+                                      inputMode: 'numeric',
+                                      pattern: '[0-9]*'
+                                    }}
+                                    onKeyDown={handleNumericInput}
+                                  />
+                                </Tooltip>
                               ) : (
                                 <Box 
                                   sx={{ 
@@ -1055,42 +1334,72 @@ const StrengthTrainings = () => {
                   {addingSetId === training.strenghtTrainingId ? (
                     <Paper sx={{ padding: '1rem', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
                       <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                        <TextField
-                          name="exerciseName"
-                          label="Exercise"
-                          value={newSetFormData.exerciseName}
-                          onChange={handleNewSetFormChange}
-                          size="small"
-                          sx={{ flex: 2 }}
-                        />
-                        <TextField
-                          name="repetitionsNumber"
-                          label="Reps"
-                          type="number"
-                          value={newSetFormData.repetitionsNumber}
-                          onChange={handleNewSetFormChange}
-                          size="small"
-                          sx={{ width: '100px' }}
-                        />
-                        <TextField
-                          name="weight"
-                          label="Weight (kg)"
-                          type="number"
-                          value={newSetFormData.weight}
-                          onChange={handleNewSetFormChange}
-                          size="small"
-                          sx={{ width: '120px' }}
-                        />
-                        <TextField
-                          name="exhaustionLevel"
-                          label="Exhaustion"
-                          type="number"
-                          value={newSetFormData.exhaustionLevel}
-                          onChange={handleNewSetFormChange}
-                          size="small"
-                          inputProps={{ min: 1, max: 10 }}
-                          sx={{ width: '120px' }}
-                        />
+                        <Tooltip title={newSetValidationErrors.exerciseName || ''} open={!!newSetValidationErrors.exerciseName} placement="top" arrow>
+                          <TextField
+                            name="exerciseName"
+                            label="Exercise"
+                            value={newSetFormData.exerciseName}
+                            onChange={handleNewSetFormChange}
+                            size="small"
+                            error={!!newSetValidationErrors.exerciseName}
+                            sx={{ flex: 2 }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={newSetValidationErrors.repetitionsNumber || ''} open={!!newSetValidationErrors.repetitionsNumber} placement="top" arrow>
+                          <TextField
+                            name="repetitionsNumber"
+                            label="Reps"
+                            type="number"
+                            value={newSetFormData.repetitionsNumber}
+                            onChange={handleNewSetFormChange}
+                            size="small"
+                            error={!!newSetValidationErrors.repetitionsNumber}
+                            sx={{ width: '100px' }}
+                            inputProps={{ 
+                              min: 1,
+                              step: 1,
+                              inputMode: 'numeric',
+                              pattern: '[0-9]*'
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={newSetValidationErrors.weight || ''} open={!!newSetValidationErrors.weight} placement="top" arrow>
+                          <TextField
+                            name="weight"
+                            label="Weight (kg)"
+                            type="number"
+                            value={newSetFormData.weight}
+                            onChange={handleNewSetFormChange}
+                            size="small"
+                            error={!!newSetValidationErrors.weight}
+                            sx={{ width: '120px' }}
+                            inputProps={{ 
+                              min: 1,
+                              step: 1,
+                              inputMode: 'numeric',
+                              pattern: '[0-9]*'
+                            }}
+                          />
+                        </Tooltip>
+                        <Tooltip title={newSetValidationErrors.exhaustionLevel || ''} open={!!newSetValidationErrors.exhaustionLevel} placement="top" arrow>
+                          <TextField
+                            name="exhaustionLevel"
+                            label="Exhaustion"
+                            type="number"
+                            value={newSetFormData.exhaustionLevel}
+                            onChange={handleNewSetFormChange}
+                            size="small"
+                            error={!!newSetValidationErrors.exhaustionLevel}
+                            inputProps={{ 
+                              min: 1,
+                              max: 10,
+                              step: 1,
+                              inputMode: 'numeric',
+                              pattern: '[0-9]*'
+                            }}
+                            sx={{ width: '120px' }}
+                          />
+                        </Tooltip>
                         <Button
                           color="primary"
                           onClick={() => handleAddSetSave(training.strenghtTrainingId)}
@@ -1160,15 +1469,6 @@ const StrengthTrainings = () => {
                         sx={{ minWidth: '100px' }}
                       >
                         Edit
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        startIcon={<FontAwesomeIcon icon={faEye} />}
-                        onClick={() => navigate("/strength/" + training.strenghtTrainingId)}
-                        sx={{ minWidth: '100px' }}
-                      >
-                        View Details
                       </Button>
                       <Button
                         variant="outlined"
