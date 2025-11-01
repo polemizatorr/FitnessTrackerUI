@@ -41,5 +41,4 @@ packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
 
 # Ignore package files
-package.json
 package-lock.json
