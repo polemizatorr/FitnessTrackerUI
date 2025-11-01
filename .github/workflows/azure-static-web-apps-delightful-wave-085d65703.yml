@@ -28,7 +28,7 @@ jobs:
 
       - name: Install & Build
         run: |
-          cd FitnessTrackerUI/fitness-tracker-ui
+          cd fitness-tracker-ui
           npm install
           npm run build
 
@@ -37,9 +37,8 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_DELIGHTFUL_WAVE_085D65703 }}
           action: "upload"
-          app_location: "FitnessTrackerUI/fitness-tracker-ui"
+          app_location: "fitness-tracker-ui"
           output_location: "build"
-          github_id_token: ${{ steps.idtoken.outputs.result }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
